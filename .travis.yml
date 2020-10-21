@@ -1,0 +1,20 @@
+dist: xenial
+os: linux
+language: node_js
+node_js:
+  - 12
+
+services:
+  - docker
+
+script:
+  - npm run test:coverage
+  - codecov -f coverage/*.json
+
+deploy:
+  provider: script
+  script: bash docker/heroku_push.sh
+  cleanup: true
+  on:
+    all_branches: true
+    condition: $TRAVIS_BRANCH = master || $TRAVIS_BRANCH = develop

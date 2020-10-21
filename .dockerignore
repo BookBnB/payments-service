@@ -1,0 +1,13 @@
+.nyc_output
+coverage
+features
+log
+node_modules
+src
+test
+.env
+.gitignore
+.travis.yml
+docker-compose.yml
+Dockerfile
+README.md

@@ -1,0 +1,7 @@
+log/
+node_modules/
+build/
+.idea/
+.nyc_output/
+coverage/
+migration/*.js
