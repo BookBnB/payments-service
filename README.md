@@ -1,7 +1,7 @@
 # Payments Service
 
 [![Build Status](https://travis-ci.com/BookBnB/payments-service.svg?token=ztzmYxxiK9M4zZcGZZzZ&branch=master)](https://travis-ci.com/BookBnB/payments-service)
-[![codecov](https://codecov.io/gh/BookBnB/payments-service/branch/master/graph/badge.svg?token=4TF231UDNN)](https://codecov.io/gh/BookBnB/payments-service)
+[![codecov](https://codecov.io/gh/BookBnB/payments-service/branch/master/graph/badge.svg?token=G4MAR98U37)](https://codecov.io/gh/BookBnB/payments-service)
 [![Heroku](https://img.shields.io/badge/heroku-master-success.svg?l?style=flat&logo=heroku&logoColor=white&labelColor=494998)](https://payments-service-master.herokuapp.com/)
 [![Heroku](https://img.shields.io/badge/heroku-develop-success.svg?l?style=flat&logo=heroku&logoColor=white&labelColor=494998)](https://payments-service-develop.herokuapp.com/)
 
