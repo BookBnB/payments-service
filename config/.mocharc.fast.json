@@ -1,0 +1,7 @@
+{
+  "spec": "build/test/**/*.js",
+  "require": "source-map-support/register",
+  "watch": true,
+  "watchFiles": "build",
+  "reporter": "min"
+}

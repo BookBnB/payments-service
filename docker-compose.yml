@@ -2,8 +2,10 @@ version: '3'
 services:
   app:
     image: node:12.19.0-alpine3.12
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
     ports:
-      - "3000:${PORT}"
+      - "4000:${PORT}"
     working_dir: /app
     command: npm run devStart
     volumes:
@@ -18,9 +20,26 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
+      - TEST_DB_NAME=${TEST_DB_NAME}
     volumes:
-      - payments-service-postgres13-data:/var/lib/postgresql/data
+      - bookbnb-postgres13-data:/var/lib/postgresql/data
     command: -p "${DB_PORT}"
 
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "8080:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@user.com
+      - PGADMIN_DEFAULT_PASSWORD=postgres
+    volumes:
+      - bookbnb-pgAdmin-data:/var/lib/pgadmin
+    
+  ganache:
+    image: trufflesuite/ganache-cli:latest
+    ports:
+      - "8545:8545"    
+
 volumes:
-  payments-service-postgres13-data:
+  bookbnb-postgres13-data:
+  bookbnb-pgAdmin-data:

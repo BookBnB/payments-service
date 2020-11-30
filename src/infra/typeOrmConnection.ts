@@ -8,7 +8,7 @@ export default async (): Promise<Connection> => {
         ...connectionOptions,
         logger: new OrmLogger(new Log4JSLogger('Orm')),
         entities: [
-            `${__dirname}/../domain/**/entities/*`
+            `${__dirname}/../domain/**/entidades/**/*`
         ]
     });
 }
