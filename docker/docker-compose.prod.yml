@@ -3,11 +3,11 @@ services:
   app:
     image: payments-service
     ports:
-      - "3000:${PORT}"
+      - "4000:${PORT}"
     depends_on:
       - postgres
     environment:
-      - PORT=3000
+      - PORT=4000
       - TYPEORM_CONNECTION=postgres
       - TYPEORM_HOST=postgres
       - TYPEORM_USERNAME=postgres

@@ -2,10 +2,14 @@
   "extends": "@istanbuljs/nyc-config-typescript",
   "reporter": [
     "text",
-    "json"
+    "json",
+    "html"
   ],
   "all": true,
   "include": [
     "src/**/*"
+  ],
+  "exclude": [
+    "src/infra/migration/**/*"
   ]
 }

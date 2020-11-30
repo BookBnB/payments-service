@@ -11,3 +11,5 @@ test
 docker-compose.yml
 Dockerfile
 README.md
+build/features
+build/test

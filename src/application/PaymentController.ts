@@ -5,12 +5,9 @@ import {
 import { OpenAPI } from 'routing-controllers-openapi';
 import Web3 from 'web3';
 
-@OpenAPI({
-    security: [{basicAuth: []}]
-})
-
-@JsonController('/payments')
-export class PaymentController {
+@OpenAPI({ security: [{basicAuth: []}] })
+@JsonController('/pagos')
+export class PagoController {
     constructor(private readonly web3: Web3) {
     }
 

@@ -1,14 +1,20 @@
-import {Middleware, ExpressMiddlewareInterface, ExpressErrorMiddlewareInterface} from "routing-controllers";
 import {ILogger} from "./Logger";
+import {Application} from "express";
 
-@Middleware({ type: "after" })
-export class HTTPLogger implements ExpressMiddlewareInterface {
 
-    public constructor(private readonly logger: ILogger) {
+export class HTTPLogger {
+    private readonly logger: ILogger;
+
+    public constructor({app, logger}: { app: Application, logger: ILogger }) {
+        this.logger = logger
+        app.use((request: any, response: any, next: (err?: any) => any) =>
+            this.use(request, response, next))
     }
 
     use(request: any, response: any, next: (err?: any) => any): void {
-        this.logger.info(HTTPLogger.logMessage(request, response))
+        response.on('finish', () => {
+            this.logger.info(HTTPLogger.logMessage(request, response))
+        })
         next();
     }
 
@@ -19,10 +25,13 @@ export class HTTPLogger implements ExpressMiddlewareInterface {
     }
 }
 
-@Middleware({ type: "after" })
-export class HTTPErrorHandlerLogger implements ExpressErrorMiddlewareInterface {
+export class HTTPErrorHandlerLogger {
+    private readonly logger: ILogger;
 
-    public constructor(private readonly logger: ILogger) {
+    public constructor({app, logger}: { app: Application, logger: ILogger }) {
+        this.logger = logger
+        app.use((error: any, request: any, response: any, next: (err?: any) => any) =>
+            this.error(error, request, response, next))
     }
 
     error(error: any, request: any, response: any, next: (err?: any) => any): void {

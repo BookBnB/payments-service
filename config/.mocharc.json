@@ -1,0 +1,7 @@
+{
+  "spec": "test/**/*.ts",
+  "require": [
+    "@wessberg/di-compiler/register",
+    "source-map-support/register"
+  ]
+}
