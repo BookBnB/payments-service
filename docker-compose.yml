@@ -14,7 +14,7 @@ services:
       - postgres
 
   postgres:
-    image: postgres:13.0-alpine
+    build: docker/postgres
     hostname: "${DB_HOSTNAME}"
     environment:
       - POSTGRES_USER=${DB_USER}
@@ -22,7 +22,7 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - TEST_DB_NAME=${TEST_DB_NAME}
     volumes:
-      - bookbnb-postgres13-data:/var/lib/postgresql/data
+      - bookbnb-payments-postgres13-data:/var/lib/postgresql/data
     command: -p "${DB_PORT}"
 
   pgadmin:
@@ -33,7 +33,7 @@ services:
       - PGADMIN_DEFAULT_EMAIL=user@user.com
       - PGADMIN_DEFAULT_PASSWORD=postgres
     volumes:
-      - bookbnb-pgAdmin-data:/var/lib/pgadmin
+      - bookbnb-payments-pgAdmin-data:/var/lib/pgadmin
     
   ganache:
     image: trufflesuite/ganache-cli:latest
@@ -41,5 +41,5 @@ services:
       - "8545:8545"    
 
 volumes:
-  bookbnb-postgres13-data:
-  bookbnb-pgAdmin-data:
+  bookbnb-payments-postgres13-data:
+  bookbnb-payments-pgAdmin-data:

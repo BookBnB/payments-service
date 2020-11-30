@@ -3,10 +3,11 @@ import dotenvExpand from 'dotenv-expand';
 import { configure } from "log4js";
 import app from './app';
 import Log4JSLogger, { ILogger } from "./infra/logging/Logger";
+import logConfig from '../config/log-config.json';
 
 async function main() {
 	dotenvExpand(dotenv.config())
-	configure(require('../config/log-config.json'));
+	configure(logConfig);
 
 	const DEFAULT_PORT: number = 4000;
 	const port: number = process.env.PORT ? parseInt(process.env.PORT) : DEFAULT_PORT;
