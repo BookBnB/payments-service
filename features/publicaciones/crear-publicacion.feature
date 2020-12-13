@@ -10,3 +10,7 @@ Característica:
     Escenario: Creación Exitosa
         Cuando creo una publicacion con precio por noche 1 eth
         Entonces veo que hay una publicación a mi nombre con precio por noche 1 eth
+
+    Escenario: Creación Fallida - Precio nulo
+        Cuando creo una publicacion con precio por noche 0 eth
+        Entonces veo un error 'Price cant be zero'

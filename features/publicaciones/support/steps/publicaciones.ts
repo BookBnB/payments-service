@@ -34,3 +34,9 @@ Then('veo que hay una publicación a mi nombre con precio por noche {int} eth', 
     expect(publicacion.direccionAnfitrion).to.eq(this.billetera.direccion)
     expect(publicacion.precioPorNoche).to.eq(monto)
 });
+
+Then('veo un error {string}', function (message) {
+    expect(this.last_response).to.have.status(400)
+    expect(this.last_response).to.be.json
+    expect(this.last_response.body).to.have.property('message').to.be.equal(message)
+})
