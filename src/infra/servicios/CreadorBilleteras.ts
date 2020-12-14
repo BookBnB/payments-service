@@ -3,7 +3,7 @@ import { entropyToMnemonic } from "bip39";
 import Web3 from "web3";
 import Billetera from "../../domain/billeteras/entidades/Billetera";
 import { ICreadorBilleteras } from "../../domain/billeteras/servicios/CreadorBilleteras";
-import UUID from "../../domain/common/UUID";
+import UUID from "../../domain/common/entidades/UUID";
 
 export default class CreadorBilleteras implements ICreadorBilleteras {
     async crear(id: UUID): Promise<Billetera> {

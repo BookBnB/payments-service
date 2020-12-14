@@ -1,4 +1,4 @@
-import UUID from "../../common/UUID";
+import UUID from "../../common/entidades/UUID";
 import { UseCase } from "../../UseCase";
 import BilleteraDTO from "../dtos/BilleteraDTO";
 import BilleteraYaExisteError from "../excepciones/BilleteraYaExisteError";

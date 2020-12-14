@@ -1,6 +1,7 @@
 import Billetera from "../billeteras/entidades/Billetera";
+import { CrearPublicacionDTO } from "../publicaciones/casos-uso/CrearPublicacion";
 import PublicacionDTO from "../publicaciones/dtos/PublicacionDTO";
 
 export interface IContratoBookBnB {
-    crearPublicacion(precioPorNoche: number, billetera: Billetera): Promise<PublicacionDTO>
+    crearPublicacion(parametros: CrearPublicacionDTO, billetera: Billetera): Promise<PublicacionDTO>
 }

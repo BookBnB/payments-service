@@ -1,17 +1,21 @@
-import {After, AfterAll, Before, BeforeAll, World} from "cucumber";
-import express from "express"
-import Api from "../src/app/Api";
-import Log4JSLogger from "../src/infra/logging/Logger";
-import {DIContainer} from "@wessberg/di";
-import {Connection} from "typeorm";
+import { DIContainer } from "@wessberg/di";
+import { After, Before, BeforeAll, World } from "cucumber";
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
-import Registry from "../src/infra/container/Registry";
-import Web3 from "web3";
+import express from "express";
 import { configure } from "log4js";
+import sinon from "sinon";
+import { Connection } from "typeorm";
+import Web3 from "web3";
 import logConfig from "../config/log-config.json";
+import Api from "../src/app/Api";
+import { abi as BookBnBABI, bytecode as BookBnBBytecode } from "../src/contracts/BnBooking.json";
+import IServicioCore from "../src/domain/common/servicios/IServicioCore";
+import Registry from "../src/infra/container/Registry";
 import { HTTPErrorHandlerLogger, HTTPLogger } from "../src/infra/logging/HTTPLogger";
-import { abi as BookBnBABI, bytecode as BookBnBBytecode } from "../src/contracts/BnBooking.json"
+import Log4JSLogger from "../src/infra/logging/Logger";
+import ServicioCore from "../src/infra/servicios/ServicioCore";
+import TestRegistry from "./doubles/TestRegistry";
 
 dotenvExpand(dotenv.config({path: 'features/.env'}))
 
@@ -45,7 +49,9 @@ async function setupApi(context: World) {
     const app = express()
     context.app = app
     context.container = new DIContainer()
-    await new Registry().registrar(context.container);
+    
+    context.mockServicioCore = sinon.createStubInstance(ServicioCore)
+    await new TestRegistry(context.mockServicioCore).registrar(context.container);
         
     const logger = new Log4JSLogger('Tests')
     new HTTPLogger({app, logger})
@@ -91,6 +97,10 @@ async function revertSnapshot(context: World) {
     await context.web3.evm.revert(context.snapshotActual)
 }
 
+async function clearSinon() {
+    sinon.restore()
+}
+
 Before(async function () {
     await setupWeb3(this)
     await takeSnapshot(this)
@@ -101,4 +111,5 @@ Before(async function () {
 After(async function () {
     await closeContainer(this)
     await revertSnapshot(this)
+    await clearSinon()
 });

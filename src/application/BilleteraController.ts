@@ -3,7 +3,7 @@ import { OpenAPI, ResponseSchema } from "routing-controllers-openapi";
 import { CrearBilletera } from "../domain/billeteras/casos-uso/CrearBilletera";
 import BilleteraDTO from "../domain/billeteras/dtos/BilleteraDTO";
 import BilleteraYaExisteError from "../domain/billeteras/excepciones/BilleteraYaExisteError";
-import UUID from "../domain/common/UUID";
+import UUID from "../domain/common/entidades/UUID";
 
 @OpenAPI({ security: [{basicAuth: []}] })
 @JsonController('/billeteras')

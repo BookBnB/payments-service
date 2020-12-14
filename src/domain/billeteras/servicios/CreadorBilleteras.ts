@@ -1,4 +1,4 @@
-import UUID from "../../common/UUID";
+import UUID from "../../common/entidades/UUID";
 import Billetera from "../entidades/Billetera";
 
 export interface ICreadorBilleteras {

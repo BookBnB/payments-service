@@ -37,6 +37,8 @@ services:
     
   ganache:
     image: trufflesuite/ganache-cli:latest
+    ports:
+      - "8545:8545"
     command: -e 10000 -a 1 -s asecretseed
 
 volumes:

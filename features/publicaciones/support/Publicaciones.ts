@@ -7,8 +7,9 @@ export default class Publicaciones extends Recurso {
         return this.BASE_URL;
     }
 
-    public static async crear(context: any, idUsuario: string, precioPorNoche: number) {
+    public static async crear(context: any, idPublicacion: string, idUsuario: string, precioPorNoche: number) {
         await this.post(context, '/', {
+            idPublicacion: idPublicacion,
             idUsuario: idUsuario,
             precioPorNoche: precioPorNoche
         })
