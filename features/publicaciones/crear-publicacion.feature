@@ -11,7 +11,6 @@ Característica:
         Cuando creo una publicacion con precio por noche 1.554 eth
         Entonces se emite un evento para la nueva publicacion
 
-    @wip
     Escenario: Creación Fallida - Precio nulo
         Cuando creo una publicacion con precio por noche 0 eth
-        Entonces veo un error 'Price cant be zero'
+        Entonces no se emite ningún evento

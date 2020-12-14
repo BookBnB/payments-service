@@ -52,8 +52,9 @@ Then('se emite un evento para la nueva publicacion', async function () {
     })
 });
 
-Then('veo un error {string}', function (message) {
+Then('no se emite ningún evento', function () {
     expect(this.last_response).to.have.status(200)
     expect(this.last_response).to.be.json
-    expect(this.last_response.body).to.have.property('message').to.be.equal(message)
+
+    expect(this.mockServicioCore.notificar).to.not.have.been.called
 })
