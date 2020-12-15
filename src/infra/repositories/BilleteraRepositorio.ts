@@ -1,6 +1,7 @@
 import { Repository } from "typeorm";
 import Billetera from "../../domain/billeteras/entidades/Billetera";
 import IBilleteraRepositorio from "../../domain/billeteras/repositorios/BilleteraRepositorio";
+import BilleteraInexistenteError from "../../domain/publicaciones/excepciones/BilleteraInexistenteError";
 
 export class BilleteraRepositorio implements IBilleteraRepositorio {
     public constructor(
@@ -18,5 +19,16 @@ export class BilleteraRepositorio implements IBilleteraRepositorio {
         });
 
         return count > 0;
+    }
+
+    async obtener(id: string): Promise<Billetera> {
+        const billetera = await this.repo.findOne({
+            where: { idUsuario: id }
+        })
+
+        if (!billetera)
+            throw new BilleteraInexistenteError(`La billetera del usuario ${id} no existe`)
+        
+        return billetera;
     }
 }

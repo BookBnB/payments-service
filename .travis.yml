@@ -26,7 +26,7 @@ before_script:
   - psql -c "CREATE DATABASE $DB_NAME;" -U postgres
   - docker pull trufflesuite/ganache-cli:latest
   - export NODE_URL='http://localhost:8545'
-  - docker run --detach --publish 8545:8545 trufflesuite/ganache-cli:latest
+  - docker run --detach --publish 8545:8545 trufflesuite/ganache-cli:latest -e 10000 -a 1 -s asecretseed
 
 script:
   - npm run test:coverage

@@ -1,0 +1,37 @@
+import { IsNumber, IsUUID } from "class-validator";
+import IBilleteraRepositorio from "../../billeteras/repositorios/BilleteraRepositorio";
+import IServicioCore, { TipoEvento } from "../../common/servicios/IServicioCore";
+import { IContratoBookBnB } from "../../contratos/ContratoBookBnB";
+import { UseCase } from "../../UseCase";
+
+export class CrearPublicacionDTO {
+    @IsUUID(4)
+    public idPublicacion!: string;
+
+    @IsUUID(4)
+    public idUsuario!: string;
+
+    @IsNumber()
+    public precioPorNoche!: number;
+}
+
+export class CrearPublicacion implements UseCase {
+    constructor(
+        private readonly billeteras: IBilleteraRepositorio,
+        private readonly contrato: IContratoBookBnB,
+        private readonly servicioCore: IServicioCore
+    ) {
+    }
+
+    async execute(body: CrearPublicacionDTO): Promise<void> {
+        const billetera = await this.billeteras.obtener(body.idUsuario)
+
+        this.contrato.crearPublicacion(body, billetera)
+            .then((pub) => {
+                this.servicioCore.notificar({
+                    tipo: TipoEvento.NUEVA_PUBLICACION,
+                    payload: pub
+                })
+            })
+    }
+}

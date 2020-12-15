@@ -38,7 +38,8 @@ services:
   ganache:
     image: trufflesuite/ganache-cli:latest
     ports:
-      - "8545:8545"    
+      - "8545:8545"
+    command: -e 1000000 -s asecretseed
 
 volumes:
   bookbnb-payments-postgres13-data:
