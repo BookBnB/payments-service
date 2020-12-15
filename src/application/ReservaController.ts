@@ -2,6 +2,7 @@ import { Body, HttpCode, JsonController, Post, Put } from "routing-controllers";
 import { OpenAPI, ResponseSchema } from "routing-controllers-openapi";
 import { AprobarReserva, AprobarReservaDTO } from "../domain/reservas/casos-uso/AprobarReserva";
 import { CrearReserva, CrearReservaDTO } from "../domain/reservas/casos-uso/CrearReserva";
+import { RechazarReserva, RechazarReservaDTO } from "../domain/reservas/casos-uso/RechazarReserva";
 import Result from "./common/Result";
 
 @OpenAPI({ security: [{basicAuth: []}] })
@@ -9,7 +10,8 @@ import Result from "./common/Result";
 export class ReservaController {
     constructor(
         private readonly crearReserva: CrearReserva,
-        private readonly aprobarReserva: AprobarReserva
+        private readonly aprobarReserva: AprobarReserva,
+        private readonly rechazarReserva: RechazarReserva
     ) {
     }
 
@@ -27,6 +29,15 @@ export class ReservaController {
     @OpenAPI({ summary: 'Aprueba un intento de reserva para una publicación' })
     async aprobar(@Body() body: AprobarReservaDTO): Promise<Result> {
         await this.aprobarReserva.execute(body)
+
+        return Result.success()
+    }
+
+    @Put('/:id/rechazo')
+    @ResponseSchema(Result)
+    @OpenAPI({ summary: 'Aprueba un intento de reserva para una publicación' })
+    async rechazar(@Body() body: RechazarReservaDTO): Promise<Result> {
+        await this.rechazarReserva.execute(body)
 
         return Result.success()
     }

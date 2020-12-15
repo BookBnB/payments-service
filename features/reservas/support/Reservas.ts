@@ -23,4 +23,8 @@ export default class Reservas extends Recurso {
     public static async aprobar(context: World, body: any) {
         await this.put(context, `/${body.idReserva}/aprobacion`, body)
     }
+
+    public static async rechazar(context: World, body: any) {
+        await this.put(context, `/${body.idReserva}/rechazo`, body)
+    }
 }
