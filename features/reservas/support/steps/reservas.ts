@@ -37,3 +37,14 @@ Then('se emite un evento para la nueva reserva', async function () {
         }
     })
 });
+
+Then('no se emite un evento para la nueva reserva', async function () {
+    expect(this.mockServicioCore.notificar).to.not.have.been.calledWith({
+        tipo: TipoEvento.NUEVA_RESERVA,
+        payload: {
+            idReserva: this.datosReserva.idReserva,
+            fechaInicio: this.datosReserva.fechaInicio,
+            fechaFin: this.datosReserva.fechaFin
+        }
+    })
+})
