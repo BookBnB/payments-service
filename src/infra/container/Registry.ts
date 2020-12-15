@@ -14,6 +14,7 @@ import { IContratoBookBnB } from "../../domain/contratos/ContratoBookBnB";
 import { CrearPublicacion } from "../../domain/publicaciones/casos-uso/CrearPublicacion";
 import { AprobarReserva } from "../../domain/reservas/casos-uso/AprobarReserva";
 import { CrearReserva } from "../../domain/reservas/casos-uso/CrearReserva";
+import { RechazarReserva } from "../../domain/reservas/casos-uso/RechazarReserva";
 import { ContratoBookBnB } from "../contratos/ContratoBookBnB";
 import { ErrorHandler } from "../ErrorHandler";
 import { BilleteraRepositorio } from "../repositories/BilleteraRepositorio";
@@ -81,6 +82,7 @@ export default class Registry {
     protected async registrarReservas(container: DIContainer) {
         container.registerSingleton<CrearReserva>()
         container.registerSingleton<AprobarReserva>()
+        container.registerSingleton<RechazarReserva>()
         container.registerSingleton<ReservaController>()
     }
 }

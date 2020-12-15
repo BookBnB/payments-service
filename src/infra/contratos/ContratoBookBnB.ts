@@ -100,6 +100,33 @@ export class ContratoBookBnB implements IContratoBookBnB {
         }
     }
 
+    async rechazarReserva(parametros: AprobarReservaDTO, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<ReservaDTO> {
+        const web3 = new Web3(
+            new HDWalletProvider(billeteraAnfitrion.palabras, process.env.NODE_URL)
+        )
+
+        const contract = new web3.eth.Contract(<any>ContractABI, process.env.CONTRACT_ADDRESS)
+
+        const tx = await contract.methods.rejectBatch(
+            parametros.idPublicacionContrato,
+            billeteraHuesped.direccion,
+            parametros.fechaInicio.getDate(),
+            parametros.fechaInicio.getMonth() + 1,
+            parametros.fechaInicio.getFullYear(),
+            parametros.fechaFin.getDate(),
+            parametros.fechaFin.getMonth() + 1,
+            parametros.fechaFin.getFullYear()
+        )
+
+        await this.ejecutar(tx, billeteraAnfitrion)
+
+        return {
+            idReserva: parametros.idReserva,
+            fechaInicio: parametros.fechaInicio.toISOString(),
+            fechaFin: parametros.fechaFin.toISOString()
+        }
+    }
+
     private async ejecutar(tx: any, billetera: Billetera, value: BN = new BN(0)): Promise<TransactionReceipt> {
         try {
             return await tx.send({

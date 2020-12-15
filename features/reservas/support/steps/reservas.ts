@@ -58,6 +58,19 @@ When('el anfitrion {string} aprueba la reserva del usuario {string}', async func
     await Reservas.aprobar(this, this.datosAprobacion)
 });
 
+When('el anfitrion {string} rechaza la reserva del usuario {string}', async function (idAnfitrion, idHuesped) {
+    this.datosRechazo = {
+        idReserva: this.datosReserva.idReserva,
+        idPublicacionContrato: this.datosReserva.idPublicacionContrato,
+        idAnfitrion,
+        idHuesped,
+        fechaInicio: this.datosReserva.fechaInicio,
+        fechaFin: this.datosReserva.fechaFin
+    }
+
+    await Reservas.rechazar(this, this.datosRechazo)
+});
+
 Then('se emite un evento para la nueva reserva', async function () {
     await esperarEventoCreacionReserva.bind(this)()
 });
@@ -84,6 +97,22 @@ Then('se emite un evento de aceptacion de la reserva', async function () {
                 idReserva: contexto.datosAprobacion.idReserva,
                 fechaInicio: contexto.datosAprobacion.fechaInicio,
                 fechaFin: contexto.datosAprobacion.fechaFin
+            }
+        })
+    }, this)
+})
+
+Then('se emite un evento de rechazo de la reserva', async function () {
+    expect(this.last_response).to.have.status(200)
+    expect(this.last_response).to.be.json
+
+    await esperarA(function (contexto) {
+        return contexto.mockServicioCore.notificar.calledWith({
+            tipo: TipoEvento.RESERVA_RECHAZADA,
+            payload: {
+                idReserva: contexto.datosRechazo.idReserva,
+                fechaInicio: contexto.datosRechazo.fechaInicio,
+                fechaFin: contexto.datosRechazo.fechaFin
             }
         })
     }, this)
