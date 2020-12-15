@@ -11,6 +11,7 @@ import PublicacionDTO from "../../domain/publicaciones/dtos/PublicacionDTO";
 import { CrearReservaDTO } from "../../domain/reservas/casos-uso/CrearReserva";
 import ReservaDTO from "../../domain/reservas/dtos/ReservaDTO";
 import BN from "bn.js"
+import { AprobarReservaDTO } from "../../domain/reservas/casos-uso/AprobarReserva";
 
 interface Room {
     roomId: BN
@@ -30,7 +31,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
             web3.utils.toWei(parametros.precioPorNoche.toString())
         )
 
-        const receipt = await this.ejecutar(tx, billetera, web3);
+        const receipt = await this.ejecutar(tx, billetera);
 
         const evento = receipt.events!.RoomCreated;
 
@@ -63,7 +64,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
 
         const precioTotal = new BN(room.price).mul(new BN(parametros.dias()))
 
-        await this.ejecutar(tx, billetera, web3, precioTotal);
+        await this.ejecutar(tx, billetera, precioTotal);
 
         return {
             idReserva: parametros.idReserva,
@@ -72,7 +73,34 @@ export class ContratoBookBnB implements IContratoBookBnB {
         }
     }
 
-    private async ejecutar(tx: any, billetera: Billetera, web3: Web3, value: BN = new BN(0)): Promise<TransactionReceipt> {
+    async aprobarReserva(parametros: AprobarReservaDTO, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<ReservaDTO> {
+        const web3 = new Web3(
+            new HDWalletProvider(billeteraAnfitrion.palabras, process.env.NODE_URL)
+        )
+
+        const contract = new web3.eth.Contract(<any>ContractABI, process.env.CONTRACT_ADDRESS)
+
+        const tx = await contract.methods.acceptBatch(
+            parametros.idPublicacionContrato,
+            billeteraHuesped.direccion,
+            parametros.fechaInicio.getDate(),
+            parametros.fechaInicio.getMonth() + 1,
+            parametros.fechaInicio.getFullYear(),
+            parametros.fechaFin.getDate(),
+            parametros.fechaFin.getMonth() + 1,
+            parametros.fechaFin.getFullYear()
+        )
+
+        await this.ejecutar(tx, billeteraAnfitrion)
+
+        return {
+            idReserva: parametros.idReserva,
+            fechaInicio: parametros.fechaInicio.toISOString(),
+            fechaFin: parametros.fechaFin.toISOString()
+        }
+    }
+
+    private async ejecutar(tx: any, billetera: Billetera, value: BN = new BN(0)): Promise<TransactionReceipt> {
         try {
             return await tx.send({
                 from: billetera.direccion,

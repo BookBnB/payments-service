@@ -37,7 +37,7 @@ async function crearPublicacion(context: World, precio: number, billetera: Bille
     await Publicaciones.crear(context, context.datosPublicacion.id, billetera.idUsuario, precio)
 
     // TODO: mejorar la forma en la que se espera a que suceda el evento asincrónico
-    await sleep(500)
+    await sleep(1000)
 }
 
 Given('que el usuario {string} tiene una publicacion con precio {float} eth', async function (id, precio) {

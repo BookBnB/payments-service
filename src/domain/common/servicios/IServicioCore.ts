@@ -1,9 +1,7 @@
-import PublicacionDTO from "../../publicaciones/dtos/PublicacionDTO";
-
-
 export enum TipoEvento {
     NUEVA_PUBLICACION = 'NUEVA_PUBLICACION',
-    NUEVA_RESERVA = "NUEVA_RESERVA"
+    NUEVA_RESERVA = "NUEVA_RESERVA",
+    RESERVA_ACEPTADA = "RESERVA_ACEPTADA"
 }
 
 export interface Evento {
