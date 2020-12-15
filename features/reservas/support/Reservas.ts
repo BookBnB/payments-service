@@ -1,3 +1,4 @@
+import { World } from "cucumber";
 import Recurso from "../../util/Recurso";
 
 interface CreacionReserva {
@@ -17,5 +18,9 @@ export default class Reservas extends Recurso {
 
     public static async crear(context: any, body: CreacionReserva) {
         await this.post(context, '/', body)
+    }
+
+    public static async aprobar(context: World, body: any) {
+        await this.put(context, `/${body.idReserva}/aprobacion`, body)
     }
 }
