@@ -4,6 +4,7 @@ import Web3 from "web3";
 import { BilleteraController } from "../../application/BilleteraController";
 import { PagoController } from "../../application/PaymentController";
 import { PublicacionController } from "../../application/PublicacionController";
+import { ReservaController } from "../../application/ReservaController";
 import { CrearBilletera } from "../../domain/billeteras/casos-uso/CrearBilletera";
 import Billetera from "../../domain/billeteras/entidades/Billetera";
 import IBilleteraRepositorio from "../../domain/billeteras/repositorios/BilleteraRepositorio";
@@ -11,6 +12,7 @@ import { ICreadorBilleteras } from "../../domain/billeteras/servicios/CreadorBil
 import IServicioCore from "../../domain/common/servicios/IServicioCore";
 import { IContratoBookBnB } from "../../domain/contratos/ContratoBookBnB";
 import { CrearPublicacion } from "../../domain/publicaciones/casos-uso/CrearPublicacion";
+import { CrearReserva } from "../../domain/reservas/casos-uso/CrearReserva";
 import { ContratoBookBnB } from "../contratos/ContratoBookBnB";
 import { ErrorHandler } from "../ErrorHandler";
 import { BilleteraRepositorio } from "../repositories/BilleteraRepositorio";
@@ -28,6 +30,7 @@ export default class Registry {
         await this.registrarPagos(container);
         await this.registrarBilleteras(container);
         await this.registrarPublicaciones(container);
+        await this.registrarReservas(container)
 
         return container;
     }
@@ -72,5 +75,10 @@ export default class Registry {
         container.registerSingleton<PublicacionController>()
 
         container.registerSingleton<IContratoBookBnB>(() => new ContratoBookBnB())
+    }
+
+    protected async registrarReservas(container: DIContainer) {
+        container.registerSingleton<CrearReserva>()
+        container.registerSingleton<ReservaController>()
     }
 }

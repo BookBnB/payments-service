@@ -1,5 +1,6 @@
 import HDWalletProvider from "@truffle/hdwallet-provider";
 import Web3 from "web3";
+import { Contract } from "web3-eth-contract"
 import { TransactionReceipt } from 'web3-eth';
 import { abi as ContractABI } from "../../../src/contracts/BnBooking.json";
 import Billetera from "../../domain/billeteras/entidades/Billetera";
@@ -7,7 +8,15 @@ import TransaccionRevertidaError from "../../domain/common/excepciones/Transacci
 import { IContratoBookBnB } from "../../domain/contratos/ContratoBookBnB";
 import { CrearPublicacionDTO } from "../../domain/publicaciones/casos-uso/CrearPublicacion";
 import PublicacionDTO from "../../domain/publicaciones/dtos/PublicacionDTO";
+import { CrearReservaDTO } from "../../domain/reservas/casos-uso/CrearReserva";
+import ReservaDTO from "../../domain/reservas/dtos/ReservaDTO";
+import BN from "bn.js"
 
+interface Room {
+    roomId: BN
+    owner: string
+    price: BN
+}
 
 export class ContratoBookBnB implements IContratoBookBnB {
     async crearPublicacion(parametros: CrearPublicacionDTO, billetera: Billetera): Promise<PublicacionDTO> {   
@@ -33,12 +42,41 @@ export class ContratoBookBnB implements IContratoBookBnB {
         }
     }
 
-    private async ejecutar(tx: any, billetera: Billetera, web3: Web3): Promise<TransactionReceipt> {
+    async crearReserva(parametros: CrearReservaDTO, billetera: Billetera): Promise<ReservaDTO> {
+        const web3 = new Web3(
+            new HDWalletProvider(billetera.palabras, process.env.NODE_URL)
+        )
+
+        const contract = new web3.eth.Contract(<any>ContractABI, process.env.CONTRACT_ADDRESS)
+
+        const tx = await contract.methods.intentBookingBatch(
+            parametros.idPublicacionContrato,
+            parametros.fechaInicio.getDate(),
+            parametros.fechaInicio.getMonth() + 1,
+            parametros.fechaInicio.getFullYear(),
+            parametros.fechaFin.getDate(),
+            parametros.fechaFin.getMonth() + 1,
+            parametros.fechaFin.getFullYear()
+        )
+
+        const room: Room = await contract.methods.rooms(parametros.idPublicacionContrato).call()
+
+        const precioTotal = new BN(room.price).mul(new BN(parametros.dias()))
+
+        await this.ejecutar(tx, billetera, web3, precioTotal);
+
+        return {
+            idReserva: parametros.idReserva,
+            fechaInicio: parametros.fechaInicio.toISOString(),
+            fechaFin: parametros.fechaFin.toISOString()
+        }
+    }
+
+    private async ejecutar(tx: any, billetera: Billetera, web3: Web3, value: BN = new BN(0)): Promise<TransactionReceipt> {
         try {
             return await tx.send({
                 from: billetera.direccion,
-                gasPrice: await web3.eth.getGasPrice(),
-                gas: await tx.estimateGas()
+                value: value
             })
         } catch (err) {
             throw TransaccionRevertidaError.desdeError(err);

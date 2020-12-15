@@ -65,6 +65,11 @@ async function setupApi(context: World) {
     new HTTPErrorHandlerLogger({app, logger})
 }
 
+async function setupWorldState(context: World) {
+    context.billeteras = {}
+    context.publicaciones = {}
+}
+
 async function takeSnapshot(context: World) {
     context.snapshotActual = await context.web3.evm.snapshot()
 }
@@ -76,7 +81,7 @@ async function deployContract(context: World) {
 
     const deployTx = await contract.deploy({
         data: BookBnBBytecode,
-        arguments: [1, deployerAddress]
+        arguments: [0, deployerAddress]
     })
 
     contract = await deployTx.send({
@@ -106,6 +111,7 @@ Before(async function () {
     await takeSnapshot(this)
     await deployContract(this)
     await setupApi(this)
+    await setupWorldState(this)
 });
 
 After(async function () {
