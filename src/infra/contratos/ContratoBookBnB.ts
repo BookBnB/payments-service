@@ -2,7 +2,7 @@ import HDWalletProvider from "@truffle/hdwallet-provider";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract"
 import { TransactionReceipt } from 'web3-eth';
-import { abi as ContractABI } from "../../../src/contracts/BnBooking.json";
+import { abi as ContractABI } from "../../contracts/BnBooking.json";
 import Billetera from "../../domain/billeteras/entidades/Billetera";
 import TransaccionRevertidaError from "../../domain/common/excepciones/TransaccionRevertidaError";
 import { IContratoBookBnB } from "../../domain/contratos/ContratoBookBnB";
