@@ -7,16 +7,16 @@ import { UseCase } from "../../UseCase";
 
 export class RechazarReservaDTO {
     @IsUUID(4)
-    public idReserva!: string
+    public reservaId!: string
 
     @IsUUID(4)
-    public idAnfitrion!: string
+    public anfitrionId!: string
 
     @IsUUID(4)
-    public idHuesped!: string
+    public huespedId!: string
 
     @IsNumber()
-    public idPublicacionContrato!: number
+    public publicacionContratoId!: number
 
     @IsDate() @Type(() => Date)
     public fechaInicio!: Date
@@ -34,8 +34,8 @@ export class RechazarReserva implements UseCase {
     }
 
     public async execute(body: RechazarReservaDTO): Promise<void> {
-        const billeteraAnfitrion = await this.billeteras.obtener(body.idAnfitrion)
-        const billeteraHuesped = await this.billeteras.obtener(body.idHuesped)
+        const billeteraAnfitrion = await this.billeteras.obtener(body.anfitrionId)
+        const billeteraHuesped = await this.billeteras.obtener(body.huespedId)
 
         this.contrato.rechazarReserva(body, billeteraAnfitrion, billeteraHuesped)
             .then((reserva) => {

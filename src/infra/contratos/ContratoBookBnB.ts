@@ -37,8 +37,8 @@ export class ContratoBookBnB implements IContratoBookBnB {
 
         return {
             direccionAnfitrion: evento.returnValues.owner,
-            idPublicacion: parametros.idPublicacion,
-            idEnContrato: parseInt(evento.returnValues.roomId),
+            publicacionId: parametros.publicacionId,
+            contratoId: parseInt(evento.returnValues.roomId),
             precioPorNoche: parseFloat(web3.utils.fromWei(evento.returnValues.price))
         }
     }
@@ -51,7 +51,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
         const contract = new web3.eth.Contract(<any>ContractABI, process.env.CONTRACT_ADDRESS)
 
         const tx = await contract.methods.intentBookingBatch(
-            parametros.idPublicacionContrato,
+            parametros.publicacionContratoId,
             parametros.fechaInicio.getDate(),
             parametros.fechaInicio.getMonth() + 1,
             parametros.fechaInicio.getFullYear(),
@@ -60,14 +60,14 @@ export class ContratoBookBnB implements IContratoBookBnB {
             parametros.fechaFin.getFullYear()
         )
 
-        const room: Room = await contract.methods.rooms(parametros.idPublicacionContrato).call()
+        const room: Room = await contract.methods.rooms(parametros.publicacionContratoId).call()
 
         const precioTotal = new BN(room.price).mul(new BN(parametros.dias()))
 
         await this.ejecutar(tx, billetera, precioTotal);
 
         return {
-            idReserva: parametros.idReserva,
+            reservaId: parametros.reservaId,
             fechaInicio: parametros.fechaInicio.toISOString(),
             fechaFin: parametros.fechaFin.toISOString()
         }
@@ -81,7 +81,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
         const contract = new web3.eth.Contract(<any>ContractABI, process.env.CONTRACT_ADDRESS)
 
         const tx = await contract.methods.acceptBatch(
-            parametros.idPublicacionContrato,
+            parametros.publicacionContratoId,
             billeteraHuesped.direccion,
             parametros.fechaInicio.getDate(),
             parametros.fechaInicio.getMonth() + 1,
@@ -94,7 +94,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
         await this.ejecutar(tx, billeteraAnfitrion)
 
         return {
-            idReserva: parametros.idReserva,
+            reservaId: parametros.reservaId,
             fechaInicio: parametros.fechaInicio.toISOString(),
             fechaFin: parametros.fechaFin.toISOString()
         }
@@ -108,7 +108,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
         const contract = new web3.eth.Contract(<any>ContractABI, process.env.CONTRACT_ADDRESS)
 
         const tx = await contract.methods.rejectBatch(
-            parametros.idPublicacionContrato,
+            parametros.publicacionContratoId,
             billeteraHuesped.direccion,
             parametros.fechaInicio.getDate(),
             parametros.fechaInicio.getMonth() + 1,
@@ -121,7 +121,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
         await this.ejecutar(tx, billeteraAnfitrion)
 
         return {
-            idReserva: parametros.idReserva,
+            reservaId: parametros.reservaId,
             fechaInicio: parametros.fechaInicio.toISOString(),
             fechaFin: parametros.fechaFin.toISOString()
         }

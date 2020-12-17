@@ -15,7 +15,7 @@ export class BilleteraRepositorio implements IBilleteraRepositorio {
 
     async existe(id: string): Promise<Boolean> {
         const count = await this.repo.count({
-            where: { idUsuario: id }
+            where: { usuarioId: id }
         });
 
         return count > 0;
@@ -23,7 +23,7 @@ export class BilleteraRepositorio implements IBilleteraRepositorio {
 
     async obtener(id: string): Promise<Billetera> {
         const billetera = await this.repo.findOne({
-            where: { idUsuario: id }
+            where: { usuarioId: id }
         })
 
         if (!billetera)
