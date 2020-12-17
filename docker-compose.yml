@@ -1,6 +1,6 @@
 version: '3'
 services:
-  app:
+  payments-app:
     image: node:12.19.0-alpine3.12
     stdin_open: true # docker run -i
     tty: true        # docker run -t
@@ -12,6 +12,9 @@ services:
       - ./:/app
     depends_on:
       - postgres
+    networks:
+      - payments-net
+      - bookbnb-net
 
   postgres:
     build: docker/postgres
@@ -24,23 +27,22 @@ services:
     volumes:
       - bookbnb-payments-postgres13-data:/var/lib/postgresql/data
     command: -p "${DB_PORT}"
+    networks:
+      - payments-net
 
-  pgadmin:
-    image: dpage/pgadmin4
-    ports:
-      - "8080:80"
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=user@user.com
-      - PGADMIN_DEFAULT_PASSWORD=postgres
-    volumes:
-      - bookbnb-payments-pgAdmin-data:/var/lib/pgadmin
-    
   ganache:
     image: trufflesuite/ganache-cli:latest
     ports:
       - "8545:8545"
     command: -e 1000000 -s asecretseed
+    networks:
+      - payments-net
 
 volumes:
   bookbnb-payments-postgres13-data:
   bookbnb-payments-pgAdmin-data:
+
+networks:
+  payments-net:
+  bookbnb-net:
+    name: bookbnb-net

@@ -6,10 +6,10 @@ import { UseCase } from "../../UseCase";
 
 export class CrearPublicacionDTO {
     @IsUUID(4)
-    public idPublicacion!: string;
+    public publicacionId!: string;
 
     @IsUUID(4)
-    public idUsuario!: string;
+    public usuarioId!: string;
 
     @IsNumber()
     public precioPorNoche!: number;
@@ -24,7 +24,7 @@ export class CrearPublicacion implements UseCase {
     }
 
     async execute(body: CrearPublicacionDTO): Promise<void> {
-        const billetera = await this.billeteras.obtener(body.idUsuario)
+        const billetera = await this.billeteras.obtener(body.usuarioId)
 
         this.contrato.crearPublicacion(body, billetera)
             .then((pub) => {

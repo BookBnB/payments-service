@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import Web3 from "web3";
 
 interface BilleteraConstructor {
-    idUsuario: string
+    usuarioId: string
     direccion: string
     palabras: string
 }
@@ -11,7 +11,7 @@ interface BilleteraConstructor {
 @Entity()
 export default class Billetera {
     @PrimaryColumn('uuid')
-    public idUsuario!: string;
+    public usuarioId!: string;
 
     @Column()
     public direccion!: string;

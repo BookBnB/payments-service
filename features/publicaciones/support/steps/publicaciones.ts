@@ -16,7 +16,7 @@ Given('que el usuario {string} tiene una billetera con {int} ethers', async func
 
     const billetera = this.last_response.body
     this.billetera = billetera
-    this.billeteras[billetera.idUsuario] = billetera
+    this.billeteras[billetera.usuarioId] = billetera
 
     const montoWei = this.web3.utils.toWei(montoEth.toString())
 
@@ -34,7 +34,7 @@ async function crearPublicacion(this: World, precio: number, billetera: Billeter
         id: uuid(),
         precioPorNoche: precio
     }
-    await Publicaciones.crear(this, this.datosPublicacion.id, billetera.idUsuario, precio)
+    await Publicaciones.crear(this, this.datosPublicacion.id, billetera.usuarioId, precio)
 }
 
 async function esperarEventoCreacionPublicacion(this: any, billetera: BilleteraDTO) {
@@ -45,10 +45,10 @@ async function esperarEventoCreacionPublicacion(this: any, billetera: BilleteraD
         return contexto.mockServicioCore.notificar.calledWith({
             tipo: TipoEvento.NUEVA_PUBLICACION,
             payload: {
-                idPublicacion: contexto.datosPublicacion.id,
+                publicacionId: contexto.datosPublicacion.id,
                 precioPorNoche: contexto.datosPublicacion.precioPorNoche,
                 direccionAnfitrion: billetera.direccion,
-                idEnContrato: 0
+                contratoId: 0
             }
         })
     }, this)

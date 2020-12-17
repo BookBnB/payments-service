@@ -2,9 +2,9 @@ import { World } from "cucumber";
 import Recurso from "../../util/Recurso";
 
 interface CreacionReserva {
-    idReserva: string
-    idPublicacionContrato: number
-    idUsuario: string
+    reservaId: string
+    publicacionContratoId: number
+    usuarioId: string
     fechaInicio: string
     fechaFin: string
 }
@@ -21,10 +21,10 @@ export default class Reservas extends Recurso {
     }
 
     public static async aprobar(context: World, body: any) {
-        await this.put(context, `/${body.idReserva}/aprobacion`, body)
+        await this.put(context, `/${body.reservaId}/aprobacion`, body)
     }
 
     public static async rechazar(context: World, body: any) {
-        await this.put(context, `/${body.idReserva}/rechazo`, body)
+        await this.put(context, `/${body.reservaId}/rechazo`, body)
     }
 }

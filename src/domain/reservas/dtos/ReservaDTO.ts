@@ -2,7 +2,7 @@ import { IsDate, IsUUID } from "class-validator"
 
 export default class ReservaDTO {
     @IsUUID(4)
-    public idReserva!: string
+    public reservaId!: string
 
     @IsDate()
     public fechaInicio!: string

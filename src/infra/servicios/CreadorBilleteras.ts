@@ -16,7 +16,7 @@ export default class CreadorBilleteras implements ICreadorBilleteras {
         const currentAccounts = await web3.eth.getAccounts();
 
         return new Billetera({
-            idUsuario: id.id,
+            usuarioId: id.id,
             palabras: mnemonic,
             direccion: currentAccounts[0]
         });

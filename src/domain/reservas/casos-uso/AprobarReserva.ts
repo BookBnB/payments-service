@@ -1,22 +1,22 @@
 import { Type } from "class-transformer";
-import { IsDate, IsNumber, IsUUID } from "class-validator";
+import { IsDate, IsNumber, IsString, IsUUID } from "class-validator";
 import IBilleteraRepositorio from "../../billeteras/repositorios/BilleteraRepositorio";
 import IServicioCore, { TipoEvento } from "../../common/servicios/IServicioCore";
 import { IContratoBookBnB } from "../../contratos/ContratoBookBnB";
 import { UseCase } from "../../UseCase";
 
 export class AprobarReservaDTO {
-    @IsUUID(4)
-    public idReserva!: string
+    @IsString()
+    public reservaId!: string
 
     @IsUUID(4)
-    public idAnfitrion!: string
+    public anfitrionId!: string
 
     @IsUUID(4)
-    public idHuesped!: string
+    public huespedId!: string
 
     @IsNumber()
-    public idPublicacionContrato!: number
+    public publicacionContratoId!: number
 
     @IsDate() @Type(() => Date)
     public fechaInicio!: Date
@@ -34,8 +34,8 @@ export class AprobarReserva implements UseCase {
     }
 
     public async execute(body: AprobarReservaDTO): Promise<void> {
-        const billeteraAnfitrion = await this.billeteras.obtener(body.idAnfitrion)
-        const billeteraHuesped = await this.billeteras.obtener(body.idHuesped)
+        const billeteraAnfitrion = await this.billeteras.obtener(body.anfitrionId)
+        const billeteraHuesped = await this.billeteras.obtener(body.huespedId)
 
         this.contrato.aprobarReserva(body, billeteraAnfitrion, billeteraHuesped)
             .then((reserva) => {

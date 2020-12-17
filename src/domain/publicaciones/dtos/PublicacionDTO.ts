@@ -6,10 +6,10 @@ export default class PublicacionDTO {
     public direccionAnfitrion!: string
 
     @IsUUID(4)
-    public idPublicacion!: string
+    public publicacionId!: string
 
     @IsNumber()
-    public idEnContrato!: number
+    public contratoId!: number
 
     @IsNumber()
     public precioPorNoche!: number
