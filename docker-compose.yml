@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 services:
   payments-app:
     image: node:12.19.0-alpine3.12
