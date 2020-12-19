@@ -22,8 +22,8 @@ jobs:
         run: docker-compose ps -a
       - name: Run test suite
         run: |
-          docker-compose exec -T app npm install
-          docker-compose exec -T app npm run test:coverage
+          docker-compose exec -T payments-app npm install
+          docker-compose exec -T payments-app npm run test:coverage
       - name: Send coverage report
         run: node_modules/.bin/codecov -f coverage/*.json
 
