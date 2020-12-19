@@ -5,7 +5,7 @@ services:
     ports:
       - "4000:${PORT}"
     working_dir: /app
-    command: npm run devStart
+    command: sh -c "npm install && npm run devStart"
     volumes:
       - ./:/app
     depends_on:
