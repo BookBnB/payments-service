@@ -1,0 +1,45 @@
+name: build
+on: [ push, pull_request ]
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Cache docker layers
+        uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true # Ignore the failure of a step and avoid terminating the job.
+      - name: Cache node dependencies
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-dependencies
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Build docker services
+        run: docker-compose build
+      - name: Start services
+        run: docker-compose up -d
+      - name: Check running containers
+        run: docker-compose ps -a
+      - name: Run test suite
+        run: |
+          docker-compose exec -T app npm install
+          docker-compose exec -T app npm run test:coverage
+      - name: Send coverage report
+        run: node_modules/.bin/codecov -f coverage/*.json
+
+  deploy:
+    runs-on: ubuntu-20.04
+    needs: test
+    if: contains('
+      refs/heads/master
+      refs/heads/develop
+      ', github.ref)
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Deploy app
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          export BRANCH=${GITHUB_REF##*/}
+          docker/heroku_push.sh
