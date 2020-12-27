@@ -1,5 +1,5 @@
 import axios from "axios";
-import IServicioCore, {Evento} from "../../domain/common/servicios/IServicioCore";
+import IServicioCore from "../../domain/common/servicios/IServicioCore";
 
 export enum TipoEvento {
     PUBLICACION_CREADA = 'PUBLICACION_CREADA',
@@ -8,7 +8,7 @@ export enum TipoEvento {
     RESERVA_RECHAZADA = "RESERVA_RECHAZADA"
 }
 
-class EventoE {
+class Evento {
     constructor(
         public readonly tipo: TipoEvento,
         public readonly payload: any
@@ -22,37 +22,33 @@ export default class ServicioCore implements IServicioCore {
     constructor(private readonly serviceUrl: string) {
     }
 
-    private webhookUrl(): string {
-        return `${this.serviceUrl}${this.WEBHOOK}`
-    }
-
-    async notificar(evento: Evento): Promise<void> {
+    private async notificar(evento: Evento): Promise<void> {
         const targetUrl = `${this.serviceUrl}${this.WEBHOOK}`;
 
         await axios.post(targetUrl, evento);
     }
 
     async notificarPublicacionCreada(publicacionId: string, contratoId: number): Promise<void> {
-        await axios.post(this.webhookUrl(), new EventoE(TipoEvento.PUBLICACION_CREADA,{
+        await this.notificar(new Evento(TipoEvento.PUBLICACION_CREADA,{
             publicacionId,
             contratoId
-        }));
+        }))
     }
 
     async notificarReservaCreada(reservaId: string): Promise<void> {
-        await axios.post(this.webhookUrl(), new EventoE(TipoEvento.NUEVA_RESERVA,{
+        await this.notificar(new Evento(TipoEvento.NUEVA_RESERVA,{
             reservaId
         }));
     }
 
     async notificarReservaAprobada(reservaId: string): Promise<void> {
-        await axios.post(this.webhookUrl(), new EventoE(TipoEvento.RESERVA_ACEPTADA,{
+        await this.notificar(new Evento(TipoEvento.RESERVA_ACEPTADA,{
             reservaId
         }));
     }
 
     async notificarReservaRechazada(reservaId: string): Promise<void> {
-        await axios.post(this.webhookUrl(), new EventoE(TipoEvento.RESERVA_RECHAZADA,{
+        await this.notificar(new Evento(TipoEvento.RESERVA_RECHAZADA,{
             reservaId
         }));
     }

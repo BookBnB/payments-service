@@ -1,7 +1,7 @@
 import { Type } from "class-transformer";
 import { IsDate, IsNumber, IsString, IsUUID } from "class-validator";
 import IBilleteraRepositorio from "../../billeteras/repositorios/BilleteraRepositorio";
-import IServicioCore, { TipoEvento } from "../../common/servicios/IServicioCore";
+import IServicioCore from "../../common/servicios/IServicioCore";
 import { IContratoBookBnB } from "../../contratos/ContratoBookBnB";
 import { UseCase } from "../../UseCase";
 
