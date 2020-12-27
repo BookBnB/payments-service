@@ -23,16 +23,8 @@ BeforeAll(() => {
 })
 
 /**
- * Setup api and mocks
+ * Setup contract
  */
-Before(async function () {
-    this.web3 = await setupWeb3()
-    this.snapshotActual = await takeSnapshot(this.web3)
-    await deployContract(this.web3)
-    await setupApp(this)
-    setupWorldState(this)
-});
-
 async function setupWeb3() {
     const web3 = new Web3(
         new Web3.providers.HttpProvider(<string>process.env.NODE_URL)
@@ -55,21 +47,12 @@ async function setupWeb3() {
     return web3
 }
 
-async function setupApp(context: World) {
-    context.mockServicioCore = sinon.createStubInstance(ServicioCore)
-
-    context.container = new DIContainer()
-    await new TestRegistry(context.mockServicioCore).registrar(context.container);
-    context.app = await app(context.container)
-}
-
-function setupWorldState(context: World) {
-    context.billeteras = {}
-    context.publicaciones = {}
-}
-
 async function takeSnapshot(web3: any) {
     return await web3.evm.snapshot()
+}
+
+async function revertSnapshot(context: World) {
+    await context.web3.evm.revert(context.snapshotActual)
 }
 
 async function deployContract(web3: any) {
@@ -91,29 +74,48 @@ async function deployContract(web3: any) {
     process.env.CONTRACT_ADDRESS = contract.options.address
 }
 
+Before(async function () {
+    const web3 = await setupWeb3()
+    this.snapshotActual = await takeSnapshot(web3)
+    await deployContract(web3)
+    this.web3 = web3
+});
+
+After(async function () {
+    await revertSnapshot(this)
+});
+
+/**
+ * Setup api and mocks
+ */
+async function setupApp(context: World) {
+    context.mockServicioCore = sinon.createStubInstance(ServicioCore)
+
+    context.container = new DIContainer()
+    await new TestRegistry(context.mockServicioCore).registrar(context.container);
+    context.app = await app(context.container)
+}
+
+function setupWorldState(context: World) {
+    context.billeteras = {}
+    context.publicaciones = {}
+}
+
 async function closeContainer(context: World) {
     const container: DIContainer = context.container
     return await container.get<Connection>().close()
-}
-
-async function revertSnapshot(context: World) {
-    await context.web3.evm.revert(context.snapshotActual)
 }
 
 async function clearSinon() {
     sinon.restore()
 }
 
-// Before(async function () {
-//     await setupWeb3(this)
-//     await takeSnapshot(this)
-//     await deployContract(this)
-//     await setupApi(this)
-//     await setupWorldState(this)
-// });
-//
+Before(async function () {
+    await setupApp(this)
+    setupWorldState(this)
+});
+
 After(async function () {
     await closeContainer(this)
-    await revertSnapshot(this)
     await clearSinon()
 });
