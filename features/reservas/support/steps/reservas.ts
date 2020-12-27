@@ -45,7 +45,7 @@ When('el usuario {string} crea exitosamente una reserva del {string} al {string}
     await esperarEventoCreacionReserva.bind(this)()
 });
 
-When('el anfitrion {string} aprueba la reserva del usuario {string}', async function (anfitrionId, huespedId) {
+When('el anfitrión {string} aprueba la reserva del usuario {string}', async function (anfitrionId, huespedId) {
     this.datosAprobacion = {
         reservaId: this.datosReserva.reservaId,
         publicacionContratoId: this.datosReserva.publicacionContratoId,
@@ -58,7 +58,7 @@ When('el anfitrion {string} aprueba la reserva del usuario {string}', async func
     await Reservas.aprobar(this, this.datosAprobacion)
 });
 
-When('el anfitrion {string} rechaza la reserva del usuario {string}', async function (anfitrionId, huespedId) {
+When('el anfitrión {string} rechaza la reserva del usuario {string}', async function (anfitrionId, huespedId) {
     this.datosRechazo = {
         reservaId: this.datosReserva.reservaId,
         publicacionContratoId: this.datosReserva.publicacionContratoId,
@@ -86,7 +86,7 @@ Then('no se emite un evento para la nueva reserva', async function () {
     })
 })
 
-Then('se emite un evento de aceptacion de la reserva', async function () {
+Then('se emite un evento de aceptación de la reserva', async function () {
     expect(this.last_response).to.have.status(200)
     expect(this.last_response).to.be.json
 

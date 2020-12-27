@@ -6,7 +6,7 @@ Característica:
 
     Antecedentes:
         Dado que el usuario '25906492-9efa-4fdb-af87-3a15986a63b2' tiene una billetera con 100 ethers
-        Y que el usuario '25906492-9efa-4fdb-af87-3a15986a63b2' tiene una publicacion con precio 1 eth
+        Y que el usuario '25906492-9efa-4fdb-af87-3a15986a63b2' tiene una publicación con precio 1 eth
 
     Escenario: Creación Exitosa
         Dado que el usuario '149d79bf-39e0-4acb-8ac5-aa3d3006e49a' tiene una billetera con 100 ethers

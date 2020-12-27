@@ -46,13 +46,13 @@ async function esperarEventoCreacionPublicacion(this: any, publicacionId: string
     }, this)
 }
 
-Given('que el usuario {string} tiene una publicacion con precio {float} eth', async function (id, precio) {
+Given('que el usuario {string} tiene una publicación con precio {float} eth', async function (id, precio) {
     const billetera = this.billeteras[id]
     await crearPublicacion.bind(this)(precio, billetera)
     await esperarEventoCreacionPublicacion.bind(this)(this.datosUltimaPublicacion.id)
 });
 
-When('creo una publicacion con precio por noche {float} eth', async function (precioPorNoche) {
+When('creo una publicación con precio por noche {float} eth', async function (precioPorNoche) {
     await crearPublicacion.bind(this)(precioPorNoche, this.billetera)
 });
 
