@@ -30,34 +30,26 @@ Given('que el usuario {string} tiene una billetera con {int} ethers', async func
 });
 
 async function crearPublicacion(this: World, precio: number, billetera: BilleteraDTO) {
-    this.datosPublicacion = {
+    this.datosUltimaPublicacion = {
         id: uuid(),
         precioPorNoche: precio
     }
-    await Publicaciones.crear(this, this.datosPublicacion.id, billetera.usuarioId, precio)
+    await Publicaciones.crear(this, this.datosUltimaPublicacion.id, billetera.usuarioId, precio)
 }
 
-async function esperarEventoCreacionPublicacion(this: any, billetera: BilleteraDTO) {
+async function esperarEventoCreacionPublicacion(this: any, publicacionId: string) {
     expect(this.last_response).to.have.status(200)
     expect(this.last_response).to.be.json
 
     await esperarA(function (contexto) {
-        return contexto.mockServicioCore.notificar.calledWith({
-            tipo: TipoEvento.NUEVA_PUBLICACION,
-            payload: {
-                publicacionId: contexto.datosPublicacion.id,
-                precioPorNoche: contexto.datosPublicacion.precioPorNoche,
-                direccionAnfitrion: billetera.direccion,
-                contratoId: 0
-            }
-        })
+        return contexto.mockServicioCore.notificarPublicacionCreada.calledWith(publicacionId)
     }, this)
 }
 
 Given('que el usuario {string} tiene una publicacion con precio {float} eth', async function (id, precio) {
     const billetera = this.billeteras[id]
     await crearPublicacion.bind(this)(precio, billetera)
-    await esperarEventoCreacionPublicacion.bind(this)(billetera)
+    await esperarEventoCreacionPublicacion.bind(this)(this.datosUltimaPublicacion.id)
 });
 
 When('creo una publicacion con precio por noche {float} eth', async function (precioPorNoche) {
@@ -65,7 +57,7 @@ When('creo una publicacion con precio por noche {float} eth', async function (pr
 });
 
 Then('se emite un evento para la nueva publicacion', async function () {
-    await esperarEventoCreacionPublicacion.bind(this)(this.billetera)
+    await esperarEventoCreacionPublicacion.bind(this)(this.datosUltimaPublicacion.id)
 });
 
 Then('no se emite ningún evento', function () {
