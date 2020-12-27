@@ -5,7 +5,7 @@ Característica:
   Para que realicen reservas del mismo y poder cobrar su uso
 
   Antecedentes:
-    Dado que el usuario '25906492-9efa-4fdb-af87-3a15986a63b2' tiene una billetera con 100 ethers
+    Dado que soy un usuario con email 'anfitrion@book.bnb' con una billetera con 100 ethers
 
   Escenario: Creación Exitosa
     Cuando creo una publicación con precio por noche 1.554 eth

@@ -1,9 +1,9 @@
 import chai from "chai";
-import { Then, When, World } from 'cucumber';
+import {Then, When} from 'cucumber';
 import sinonChai from "sinon-chai";
-import { v4 as uuid } from "uuid";
-import { TipoEvento } from '../../../../src/domain/common/servicios/IServicioCore';
-import { esperarA } from '../../../util/utils';
+import {v4 as uuid} from "uuid";
+import {TipoEvento} from '../../../../src/domain/common/servicios/IServicioCore';
+import {esperarA} from '../../../util/utils';
 import Reservas from '../Reservas';
 
 chai.use(sinonChai)
@@ -36,16 +36,24 @@ async function esperarEventoCreacionReserva(this: any) {
     }, this)
 }
 
-When('el usuario {string} crea una reserva del {string} al {string}', async function (id, fechaInicio, fechaFin) {
-    await crearReserva.bind(this)({ usuarioId: id, fechaInicio, fechaFin })
+When('creo una reserva del {string} al {string}', async function (fechaInicio, fechaFin) {
+    await crearReserva.bind(this)({
+        usuarioId: this.usuarios.get(this.emailUsuarioActual),
+        fechaInicio,
+        fechaFin
+    })
 });
 
-When('el usuario {string} crea exitosamente una reserva del {string} al {string}', async function (id, fechaInicio, fechaFin) {
-    await crearReserva.bind(this)({ usuarioId: id, fechaInicio, fechaFin })
+When(/^(?:que )el usuario con email '([^']*)' crea exitosamente una reserva del '([^']*)' al '([^']*)'$/, async function (email, fechaInicio, fechaFin) {
+    const usuarioId = this.usuarios.get(email)
+    await crearReserva.bind(this)({usuarioId: usuarioId, fechaInicio, fechaFin})
     await esperarEventoCreacionReserva.bind(this)()
 });
 
-When('el anfitrión {string} aprueba la reserva del usuario {string}', async function (anfitrionId, huespedId) {
+When('apruebo la reserva del usuario con email {string}', async function (huespedEmail) {
+    const anfitrionId = this.usuarios.get(this.emailUsuarioActual)
+    const huespedId = this.usuarios.get(huespedEmail)
+
     this.datosAprobacion = {
         reservaId: this.datosReserva.reservaId,
         publicacionContratoId: this.datosReserva.publicacionContratoId,
@@ -58,7 +66,9 @@ When('el anfitrión {string} aprueba la reserva del usuario {string}', async fun
     await Reservas.aprobar(this, this.datosAprobacion)
 });
 
-When('el anfitrión {string} rechaza la reserva del usuario {string}', async function (anfitrionId, huespedId) {
+When('rechazo la reserva del usuario con email {string}', async function (huespedEmail) {
+    const anfitrionId = this.usuarios.get(this.emailUsuarioActual)
+    const huespedId = this.usuarios.get(huespedEmail)
     this.datosRechazo = {
         reservaId: this.datosReserva.reservaId,
         publicacionContratoId: this.datosReserva.publicacionContratoId,
