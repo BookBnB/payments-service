@@ -22,9 +22,11 @@ import CreadorBilleteras from "../servicios/CreadorBilleteras";
 import ServicioCore from "../servicios/ServicioCore";
 import typeOrmConnection from "../typeOrmConnection";
 import { IContainer } from "./Container";
+import Log4JSLogger, {ILogger} from "../logging/Logger";
 
 export default class Registry {
     public async registrar(container: DIContainer): Promise<IContainer> {
+        await this.registrarLogger(container)
         await this.registrarTypeOrmConnection(container);
         await this.registrarErrorHandler(container)
         await this.registrarWeb3(container);
@@ -35,6 +37,10 @@ export default class Registry {
         await this.registrarReservas(container)
 
         return container;
+    }
+
+    protected async registrarLogger(container: DIContainer) {
+        container.registerSingleton<ILogger>(() => new Log4JSLogger('App'));
     }
 
     protected async registrarTypeOrmConnection(container: DIContainer) {

@@ -1,28 +1,28 @@
-import { DIContainer } from "@wessberg/di";
 import express, { Application } from "express";
-import Registry from "../infra/container/Registry";
 import { HTTPErrorHandlerLogger, HTTPLogger } from "../infra/logging/HTTPLogger";
-import Log4JSLogger, { ILogger } from "../infra/logging/Logger";
+import { ILogger } from "../infra/logging/Logger";
 import Api from "./Api";
 import Welcome from "./Welcome"
+import OpenApiSpec from "./OpenApiSpec";
+import {IContainer} from "../infra/container/Container";
 
-export default async (appLogger: ILogger): Promise<Application> => {
+export default async (container: IContainer): Promise<Application> => {
     const app = express();
+    const logger = container.get<ILogger>({identifier: "ILogger"})
 
-    new HTTPLogger({app, logger: appLogger})
+    new HTTPLogger({app, logger})
     new Welcome(app)
-    new Api({
+    new Api({app, logger, container});
+    new OpenApiSpec({
         app,
-        logger: new Log4JSLogger('Api'),
-        container: await new Registry().registrar(new DIContainer()),
         openApiInfo: {
             info: {
                 title: 'BookBnB',
                 version: '1.0.0'
             }
         }
-    });
-    new HTTPErrorHandlerLogger({app, logger: appLogger})
+    })
+    new HTTPErrorHandlerLogger({app, logger})
 
     return app
 }
