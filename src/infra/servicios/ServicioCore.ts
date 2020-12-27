@@ -50,4 +50,10 @@ export default class ServicioCore implements IServicioCore {
             reservaId
         }));
     }
+
+    async notificarReservaRechazada(reservaId: string): Promise<void> {
+        await axios.post(this.webhookUrl(), new EventoE(TipoEvento.RESERVA_RECHAZADA,{
+            reservaId
+        }));
+    }
 }

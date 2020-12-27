@@ -39,12 +39,7 @@ export class RechazarReserva implements UseCase {
 
         this.contrato.rechazarReserva(body, billeteraAnfitrion, billeteraHuesped)
             .then((reserva) => {
-                this.servicioCore.notificar({
-                    tipo: TipoEvento.RESERVA_RECHAZADA,
-                    payload: {
-                        reservaId: reserva.id
-                    }
-                })
+                this.servicioCore.notificarReservaRechazada(reserva.id)
             })
     }
 }

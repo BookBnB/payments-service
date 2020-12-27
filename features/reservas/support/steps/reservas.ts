@@ -103,11 +103,6 @@ Then('se emite un evento de rechazo de la reserva', async function () {
     expect(this.last_response).to.be.json
 
     await esperarA(function (contexto) {
-        return contexto.mockServicioCore.notificar.calledWith({
-            tipo: TipoEvento.RESERVA_RECHAZADA,
-            payload: {
-                reservaId: contexto.datosRechazo.reservaId,
-            }
-        })
+        return contexto.mockServicioCore.notificarReservaRechazada.calledWith(contexto.datosRechazo.reservaId)
     }, this)
 })
