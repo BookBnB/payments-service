@@ -42,15 +42,15 @@ export default class ServicioCore implements IServicioCore {
         }));
     }
 
-    async notificarReservaAprobada(reservaId: string): Promise<void> {
+    async notificarReservaAprobada(reserva: Reserva): Promise<void> {
         await this.notificar(new Evento(TipoEvento.RESERVA_ACEPTADA,{
-            reservaId
+            reservaId: reserva.id
         }));
     }
 
-    async notificarReservaRechazada(reservaId: string): Promise<void> {
+    async notificarReservaRechazada(reserva: Reserva): Promise<void> {
         await this.notificar(new Evento(TipoEvento.RESERVA_RECHAZADA,{
-            reservaId
+            reservaId: reserva.id
         }));
     }
 }

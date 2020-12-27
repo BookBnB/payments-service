@@ -96,7 +96,9 @@ Then('se emite un evento de aceptación de la reserva', async function () {
     expect(this.last_response).to.be.json
 
     await esperarA(function (contexto) {
-        return contexto.mockServicioCore.notificarReservaAprobada.calledWithMatch(contexto.datosAprobacion.reservaId)
+        return contexto.mockServicioCore.notificarReservaAprobada.calledWithMatch({
+            id: contexto.datosAprobacion.reservaId
+        })
     }, this)
 })
 
@@ -105,6 +107,8 @@ Then('se emite un evento de rechazo de la reserva', async function () {
     expect(this.last_response).to.be.json
 
     await esperarA(function (contexto) {
-        return contexto.mockServicioCore.notificarReservaRechazada.calledWith(contexto.datosRechazo.reservaId)
+        return contexto.mockServicioCore.notificarReservaRechazada.calledWithMatch({
+            id: contexto.datosRechazo.reservaId
+        })
     }, this)
 })

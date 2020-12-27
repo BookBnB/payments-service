@@ -39,7 +39,7 @@ export class AprobarReserva implements UseCase {
 
         this.contrato.aprobarReserva(body, billeteraAnfitrion, billeteraHuesped)
             .then((reserva) => {
-                this.servicioCore.notificarReservaAprobada(reserva.id)
+                this.servicioCore.notificarReservaAprobada(reserva)
             })
     }
 }
