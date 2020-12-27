@@ -3,6 +3,7 @@ import IServicioCore, {Evento} from "../../domain/common/servicios/IServicioCore
 
 export enum TipoEvento {
     PUBLICACION_CREADA = 'PUBLICACION_CREADA',
+    NUEVA_RESERVA = 'NUEVA_RESERVA'
 }
 
 class EventoE {
@@ -33,6 +34,12 @@ export default class ServicioCore implements IServicioCore {
         await axios.post(this.webhookUrl(), new EventoE(TipoEvento.PUBLICACION_CREADA,{
             publicacionId,
             contratoId
+        }));
+    }
+
+    async notificarReservaCreada(reservaId: string): Promise<void> {
+        await axios.post(this.webhookUrl(), new EventoE(TipoEvento.NUEVA_RESERVA,{
+            reservaId
         }));
     }
 }

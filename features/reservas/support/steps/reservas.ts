@@ -25,12 +25,7 @@ async function esperarEventoCreacionReserva(this: any) {
     expect(this.last_response).to.be.json
 
     await esperarA(function (contexto) {
-        return contexto.mockServicioCore.notificar.calledWithMatch({
-            tipo: TipoEvento.NUEVA_RESERVA,
-            payload: {
-                reservaId: contexto.datosReserva.reservaId
-            }
-        })
+        return contexto.mockServicioCore.notificarReservaCreada.calledWithMatch(contexto.datosReserva.reservaId)
     }, this)
 }
 
