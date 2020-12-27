@@ -4,11 +4,12 @@ import { TransactionReceipt } from 'web3-eth';
 import { abi as ContractABI } from "../../contracts/BnBooking.json";
 import Billetera from "../../domain/billeteras/entidades/Billetera";
 import TransaccionRevertidaError from "../../domain/common/excepciones/TransaccionRevertidaError";
-import {CrearPublicacion, IContratoBookBnB} from "../../domain/contratos/ContratoBookBnB";
+import {IContratoBookBnB} from "../../domain/contratos/ContratoBookBnB";
 import { CrearReservaDTO } from "../../domain/reservas/casos-uso/CrearReserva";
 import Reserva from "../../domain/reservas/entidades/Reserva";
 import BN from "bn.js"
 import { AprobarReservaDTO } from "../../domain/reservas/casos-uso/AprobarReserva";
+import Publicacion from "../../domain/publicaciones/entidades/Publicacion";
 
 interface Room {
     roomId: BN
@@ -17,7 +18,7 @@ interface Room {
 }
 
 export class ContratoBookBnB implements IContratoBookBnB {
-    async crearPublicacion(precioPorNoche: number, billetera: Billetera): Promise<CrearPublicacion> {
+    async crearPublicacion(publicacion: Publicacion, billetera: Billetera): Promise<Publicacion> {
         const web3 = new Web3(
             new HDWalletProvider(billetera.palabras, process.env.NODE_URL)
         )
@@ -25,14 +26,16 @@ export class ContratoBookBnB implements IContratoBookBnB {
         const contract = new web3.eth.Contract(<any>ContractABI, process.env.CONTRACT_ADDRESS)
 
         const tx = await contract.methods.createRoom(
-            web3.utils.toWei(precioPorNoche.toString())
+            web3.utils.toWei(publicacion.precioPorNoche.toString())
         )
 
         const receipt = await this.ejecutar(tx, billetera);
 
         const evento = receipt.events!.RoomCreated;
 
-        return {contratoId: parseInt(evento.returnValues.roomId)}
+        publicacion.setContratoId(parseInt(evento.returnValues.roomId))
+
+        return publicacion
     }
 
     async crearReserva(parametros: CrearReservaDTO, billetera: Billetera): Promise<Reserva> {
