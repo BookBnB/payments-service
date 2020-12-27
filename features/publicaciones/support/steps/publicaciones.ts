@@ -22,7 +22,9 @@ async function esperarEventoCreacionPublicacion(this: any, publicacionId: string
     expect(this.last_response).to.be.json
 
     await esperarA(function (contexto) {
-        return contexto.mockServicioCore.notificarPublicacionCreada.calledWith(publicacionId)
+        return contexto.mockServicioCore.notificarPublicacionCreada.calledWithMatch({
+            id: publicacionId
+        })
     }, this)
 }
 

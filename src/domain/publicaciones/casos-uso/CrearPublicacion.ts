@@ -3,6 +3,7 @@ import IBilleteraRepositorio from "../../billeteras/repositorios/BilleteraReposi
 import IServicioCore from "../../common/servicios/IServicioCore";
 import {IContratoBookBnB} from "../../contratos/ContratoBookBnB";
 import {UseCase} from "../../UseCase";
+import Publicacion from "../entidades/Publicacion";
 
 export class CrearPublicacionDTO {
     @IsUUID(4)
@@ -28,7 +29,10 @@ export class CrearPublicacion implements UseCase {
 
         this.contrato.crearPublicacion(body.precioPorNoche, billetera)
             .then(({contratoId}) => {
-                this.servicioCore.notificarPublicacionCreada(body.publicacionId, contratoId)
+                this.servicioCore.notificarPublicacionCreada(new Publicacion({
+                    id: body.publicacionId,
+                    contratoId: contratoId
+                }))
             })
     }
 }

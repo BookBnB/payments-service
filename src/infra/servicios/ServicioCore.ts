@@ -1,6 +1,7 @@
 import axios from "axios";
 import IServicioCore from "../../domain/common/servicios/IServicioCore";
 import Reserva from "../../domain/reservas/entidades/Reserva";
+import Publicacion from "../../domain/publicaciones/entidades/Publicacion";
 
 export enum TipoEvento {
     PUBLICACION_CREADA = 'PUBLICACION_CREADA',
@@ -29,10 +30,10 @@ export default class ServicioCore implements IServicioCore {
         await axios.post(targetUrl, evento);
     }
 
-    async notificarPublicacionCreada(publicacionId: string, contratoId: number): Promise<void> {
+    async notificarPublicacionCreada(publicacion: Publicacion): Promise<void> {
         await this.notificar(new Evento(TipoEvento.PUBLICACION_CREADA,{
-            publicacionId,
-            contratoId
+            publicacionId: publicacion.id,
+            contratoId: publicacion.contratoId
         }))
     }
 
