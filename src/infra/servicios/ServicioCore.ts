@@ -7,8 +7,8 @@ export enum TipoEvento {
 
 class EventoE {
     constructor(
-        private readonly tipo: TipoEvento,
-        private readonly payload: any
+        public readonly tipo: TipoEvento,
+        public readonly payload: any
     ) {
     }
 }

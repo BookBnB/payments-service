@@ -25,12 +25,10 @@ async function esperarEventoCreacionReserva(this: any) {
     expect(this.last_response).to.be.json
 
     await esperarA(function (contexto) {
-        return contexto.mockServicioCore.notificar.calledWith({
+        return contexto.mockServicioCore.notificar.calledWithMatch({
             tipo: TipoEvento.NUEVA_RESERVA,
             payload: {
-                reservaId: contexto.datosReserva.reservaId,
-                fechaInicio: contexto.datosReserva.fechaInicio,
-                fechaFin: contexto.datosReserva.fechaFin
+                reservaId: contexto.datosReserva.reservaId
             }
         })
     }, this)
@@ -104,9 +102,7 @@ Then('se emite un evento de aceptación de la reserva', async function () {
         return contexto.mockServicioCore.notificar.calledWith({
             tipo: TipoEvento.RESERVA_ACEPTADA,
             payload: {
-                reservaId: contexto.datosAprobacion.reservaId,
-                fechaInicio: contexto.datosAprobacion.fechaInicio,
-                fechaFin: contexto.datosAprobacion.fechaFin
+                reservaId: contexto.datosAprobacion.reservaId
             }
         })
     }, this)
@@ -121,8 +117,6 @@ Then('se emite un evento de rechazo de la reserva', async function () {
             tipo: TipoEvento.RESERVA_RECHAZADA,
             payload: {
                 reservaId: contexto.datosRechazo.reservaId,
-                fechaInicio: contexto.datosRechazo.fechaInicio,
-                fechaFin: contexto.datosRechazo.fechaFin
             }
         })
     }, this)

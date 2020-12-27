@@ -1,8 +1,8 @@
 import { IsDate, IsUUID } from "class-validator"
 
-export default class ReservaDTO {
+export default class Reserva {
     @IsUUID(4)
-    public reservaId!: string
+    public id!: string
 
     @IsDate()
     public fechaInicio!: string

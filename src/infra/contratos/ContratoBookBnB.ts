@@ -6,7 +6,7 @@ import Billetera from "../../domain/billeteras/entidades/Billetera";
 import TransaccionRevertidaError from "../../domain/common/excepciones/TransaccionRevertidaError";
 import {CrearPublicacion, IContratoBookBnB} from "../../domain/contratos/ContratoBookBnB";
 import { CrearReservaDTO } from "../../domain/reservas/casos-uso/CrearReserva";
-import ReservaDTO from "../../domain/reservas/dtos/ReservaDTO";
+import Reserva from "../../domain/reservas/entidades/Reserva";
 import BN from "bn.js"
 import { AprobarReservaDTO } from "../../domain/reservas/casos-uso/AprobarReserva";
 
@@ -35,7 +35,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
         return {contratoId: parseInt(evento.returnValues.roomId)}
     }
 
-    async crearReserva(parametros: CrearReservaDTO, billetera: Billetera): Promise<ReservaDTO> {
+    async crearReserva(parametros: CrearReservaDTO, billetera: Billetera): Promise<Reserva> {
         const web3 = new Web3(
             new HDWalletProvider(billetera.palabras, process.env.NODE_URL)
         )
@@ -59,13 +59,13 @@ export class ContratoBookBnB implements IContratoBookBnB {
         await this.ejecutar(tx, billetera, precioTotal);
 
         return {
-            reservaId: parametros.reservaId,
+            id: parametros.reservaId,
             fechaInicio: parametros.fechaInicio.toISOString(),
             fechaFin: parametros.fechaFin.toISOString()
         }
     }
 
-    async aprobarReserva(parametros: AprobarReservaDTO, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<ReservaDTO> {
+    async aprobarReserva(parametros: AprobarReservaDTO, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<Reserva> {
         const web3 = new Web3(
             new HDWalletProvider(billeteraAnfitrion.palabras, process.env.NODE_URL)
         )
@@ -86,13 +86,13 @@ export class ContratoBookBnB implements IContratoBookBnB {
         await this.ejecutar(tx, billeteraAnfitrion)
 
         return {
-            reservaId: parametros.reservaId,
+            id: parametros.reservaId,
             fechaInicio: parametros.fechaInicio.toISOString(),
             fechaFin: parametros.fechaFin.toISOString()
         }
     }
 
-    async rechazarReserva(parametros: AprobarReservaDTO, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<ReservaDTO> {
+    async rechazarReserva(parametros: AprobarReservaDTO, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<Reserva> {
         const web3 = new Web3(
             new HDWalletProvider(billeteraAnfitrion.palabras, process.env.NODE_URL)
         )
@@ -113,7 +113,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
         await this.ejecutar(tx, billeteraAnfitrion)
 
         return {
-            reservaId: parametros.reservaId,
+            id: parametros.reservaId,
             fechaInicio: parametros.fechaInicio.toISOString(),
             fechaFin: parametros.fechaFin.toISOString()
         }

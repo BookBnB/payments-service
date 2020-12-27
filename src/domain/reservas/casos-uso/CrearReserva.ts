@@ -44,7 +44,9 @@ export class CrearReserva implements UseCase {
             .then((reserva) => {
                 this.servicioCore.notificar({
                     tipo: TipoEvento.NUEVA_RESERVA,
-                    payload: reserva
+                    payload: {
+                        reservaId: reserva.id
+                    }
                 })
             })
     }
