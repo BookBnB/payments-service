@@ -30,10 +30,9 @@ export default class ServicioCore implements IServicioCore {
     }
 
     async notificarPublicacionCreada(publicacionId: string, contratoId: number): Promise<void> {
-        console.log('holaaa4', publicacionId, contratoId)
-        // await axios.post(this.webhookUrl(), {tipo: TipoEvento.PUBLICACION_CREADA, payload: {
-        //     publicacionId,
-        //     contratoId
-        // }});
+        await axios.post(this.webhookUrl(), new EventoE(TipoEvento.PUBLICACION_CREADA,{
+            publicacionId,
+            contratoId
+        }));
     }
 }
