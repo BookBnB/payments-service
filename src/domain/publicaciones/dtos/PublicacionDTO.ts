@@ -1,4 +1,10 @@
-import { IsHexadecimal, IsNumber, IsUUID, Length } from "class-validator"
+import {IsHexadecimal, IsNumber, IsUUID, Length} from "class-validator"
+
+export interface PublicacionDTOConstructor {
+    publicacionId: string
+    contratoId: number
+    precioPorNoche: number
+}
 
 export default class PublicacionDTO {
     @IsHexadecimal()
@@ -13,4 +19,8 @@ export default class PublicacionDTO {
 
     @IsNumber()
     public precioPorNoche!: number
+
+    constructor(params: PublicacionDTOConstructor) {
+        Object.assign(this, params)
+    }
 }

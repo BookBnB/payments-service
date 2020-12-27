@@ -41,7 +41,7 @@ export default class Api {
      * Configura el container para instanciar los controladores.
      * @private
      */
-    private async useContainer() {
+    private useContainer() {
         useContainer(new ContainerAdapter(this.container));
     }
 
