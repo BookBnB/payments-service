@@ -42,7 +42,7 @@ export class CrearReserva implements UseCase {
         
         this.contrato.crearReserva(body, billetera)
             .then((reserva) => {
-                this.servicioCore.notificarReservaCreada(reserva.id)
+                this.servicioCore.notificarReservaCreada(reserva)
             })
     }
 }

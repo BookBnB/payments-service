@@ -1,5 +1,6 @@
 import axios from "axios";
 import IServicioCore from "../../domain/common/servicios/IServicioCore";
+import Reserva from "../../domain/reservas/entidades/Reserva";
 
 export enum TipoEvento {
     PUBLICACION_CREADA = 'PUBLICACION_CREADA',
@@ -35,9 +36,9 @@ export default class ServicioCore implements IServicioCore {
         }))
     }
 
-    async notificarReservaCreada(reservaId: string): Promise<void> {
+    async notificarReservaCreada(reserva: Reserva): Promise<void> {
         await this.notificar(new Evento(TipoEvento.NUEVA_RESERVA,{
-            reservaId
+            reservaId: reserva.id
         }));
     }
 
