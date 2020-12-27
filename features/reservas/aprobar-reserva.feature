@@ -1,6 +1,6 @@
 # language: es
 Característica:
-    Como anfitrion
+    Como anfitrión
     Quiero poder aprobar una reserva
     Para recibir el pago del huesped
 

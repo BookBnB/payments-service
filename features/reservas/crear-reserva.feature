@@ -1,6 +1,6 @@
 # language: es
 Característica:
-    Como huesped
+    Como huésped
     Quiero poder reservarme en un alojamiento
     Para poder alojarme en el mismo
 

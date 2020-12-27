@@ -1,8 +1,8 @@
 # language: es
 Característica:
-    Como anfitrion
+    Como anfitrión
     Quiero poder rechazar una reserva
-    Para impedir que un huesped se aloje en mi propiedad
+    Para impedir que un huésped se aloje en mi propiedad
 
     Antecedentes:
         Dado que el usuario '25906492-9efa-4fdb-af87-3a15986a63b2' tiene una billetera con 100 ethers
