@@ -9,7 +9,7 @@ Característica:
 
   Escenario: Creación Exitosa
     Cuando creo una publicación con precio por noche 1.554 eth
-    Entonces se emite un evento para la nueva publicacion
+    Entonces se emite un evento para la nueva publicación
 
   Escenario: Creación Fallida - Precio nulo
     Cuando creo una publicación con precio por noche 0 eth

@@ -3,7 +3,6 @@ import { Given, Then, When, World } from 'cucumber';
 import sinonChai from "sinon-chai";
 import { v4 as uuid } from "uuid";
 import BilleteraDTO from "../../../../src/domain/billeteras/dtos/BilleteraDTO";
-import { TipoEvento } from '../../../../src/domain/common/servicios/IServicioCore';
 import Billeteras from '../../../billeteras/support/Billeteras';
 import { esperarA } from '../../../util/utils';
 import Publicaciones from '../Publicaciones';
@@ -56,7 +55,7 @@ When('creo una publicación con precio por noche {float} eth', async function (p
     await crearPublicacion.bind(this)(precioPorNoche, this.billetera)
 });
 
-Then('se emite un evento para la nueva publicacion', async function () {
+Then('se emite un evento para la nueva publicación', async function () {
     await esperarEventoCreacionPublicacion.bind(this)(this.datosUltimaPublicacion.id)
 });
 
