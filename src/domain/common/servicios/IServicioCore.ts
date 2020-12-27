@@ -14,4 +14,5 @@ export default interface IServicioCore {
     notificar(evento: Evento): Promise<void>
     notificarPublicacionCreada(publicacionId: string, contratoId: number): Promise<void>
     notificarReservaCreada(reservaId: string): Promise<void>
+    notificarReservaAprobada(reservaId: string): Promise<void>
 }

@@ -94,12 +94,7 @@ Then('se emite un evento de aceptación de la reserva', async function () {
     expect(this.last_response).to.be.json
 
     await esperarA(function (contexto) {
-        return contexto.mockServicioCore.notificar.calledWith({
-            tipo: TipoEvento.RESERVA_ACEPTADA,
-            payload: {
-                reservaId: contexto.datosAprobacion.reservaId
-            }
-        })
+        return contexto.mockServicioCore.notificarReservaAprobada.calledWithMatch(contexto.datosAprobacion.reservaId)
     }, this)
 })
 
