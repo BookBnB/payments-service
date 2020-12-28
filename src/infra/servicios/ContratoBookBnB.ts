@@ -61,11 +61,11 @@ export class ContratoBookBnB implements IContratoBookBnB {
 
         await this.ejecutar(tx, billetera, precioTotal);
 
-        return {
+        return new Reserva({
             id: parametros.reservaId,
-            fechaInicio: parametros.fechaInicio.toISOString(),
-            fechaFin: parametros.fechaFin.toISOString()
-        }
+            fechaInicio: parametros.fechaInicio,
+            fechaFin: parametros.fechaFin
+        })
     }
 
     async aprobarReserva(parametros: AprobarReservaDTO, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<Reserva> {
@@ -88,11 +88,11 @@ export class ContratoBookBnB implements IContratoBookBnB {
 
         await this.ejecutar(tx, billeteraAnfitrion)
 
-        return {
+        return new Reserva({
             id: parametros.reservaId,
-            fechaInicio: parametros.fechaInicio.toISOString(),
-            fechaFin: parametros.fechaFin.toISOString()
-        }
+            fechaInicio: parametros.fechaInicio,
+            fechaFin: parametros.fechaFin
+        })
     }
 
     async rechazarReserva(parametros: AprobarReservaDTO, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<Reserva> {
@@ -115,11 +115,11 @@ export class ContratoBookBnB implements IContratoBookBnB {
 
         await this.ejecutar(tx, billeteraAnfitrion)
 
-        return {
+        return new Reserva({
             id: parametros.reservaId,
-            fechaInicio: parametros.fechaInicio.toISOString(),
-            fechaFin: parametros.fechaFin.toISOString()
-        }
+            fechaInicio: parametros.fechaInicio,
+            fechaFin: parametros.fechaFin
+        })
     }
 
     private async ejecutar(tx: any, billetera: Billetera, value: BN = new BN(0)): Promise<TransactionReceipt> {
