@@ -1,4 +1,4 @@
-import {Body, HttpCode, JsonController, Post, Put} from "routing-controllers";
+import {Body, JsonController, Post, Put} from "routing-controllers";
 import {OpenAPI, ResponseSchema} from "routing-controllers-openapi";
 import {AprobarReserva, AprobarReservaDTO} from "../domain/contrato/casos-uso/AprobarReserva";
 import {CrearReserva, CrearReservaDTO} from "../domain/contrato/casos-uso/CrearReserva";
@@ -34,7 +34,12 @@ export class ReservaController {
     @ResponseSchema(Result)
     @OpenAPI({summary: 'Aprueba un intento de reserva para una publicación'})
     async aprobar(@Body() body: AprobarReservaDTO): Promise<Result> {
-        await this.aprobarReserva.execute(body)
+        await this.aprobarReserva.execute(body.anfitrionId, body.huespedId, new Reserva({
+            id: body.reservaId,
+            contratoId: body.publicacionContratoId,
+            fechaInicio: body.fechaInicio,
+            fechaFin: body.fechaFin
+        }))
 
         return Result.success()
     }

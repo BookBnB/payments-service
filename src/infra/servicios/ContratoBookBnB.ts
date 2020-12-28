@@ -63,7 +63,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
         return reserva
     }
 
-    async aprobarReserva(parametros: AprobarReservaDTO, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<Reserva> {
+    async aprobarReserva(reserva: Reserva, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<Reserva> {
         const web3 = new Web3(
             new HDWalletProvider(billeteraAnfitrion.palabras, process.env.NODE_URL)
         )
@@ -71,24 +71,19 @@ export class ContratoBookBnB implements IContratoBookBnB {
         const contract = new web3.eth.Contract(<any>ContractABI, process.env.CONTRACT_ADDRESS)
 
         const tx = await contract.methods.acceptBatch(
-            parametros.publicacionContratoId,
+            reserva.contratoId,
             billeteraHuesped.direccion,
-            parametros.fechaInicio.getDate(),
-            parametros.fechaInicio.getMonth() + 1,
-            parametros.fechaInicio.getFullYear(),
-            parametros.fechaFin.getDate(),
-            parametros.fechaFin.getMonth() + 1,
-            parametros.fechaFin.getFullYear()
+            reserva.fechaInicio.getDate(),
+            reserva.fechaInicio.getMonth() + 1,
+            reserva.fechaInicio.getFullYear(),
+            reserva.fechaFin.getDate(),
+            reserva.fechaFin.getMonth() + 1,
+            reserva.fechaFin.getFullYear()
         )
 
         await this.ejecutar(tx, billeteraAnfitrion)
 
-        return new Reserva({
-            contratoId: 0,
-            id: parametros.reservaId,
-            fechaInicio: parametros.fechaInicio,
-            fechaFin: parametros.fechaFin
-        })
+        return reserva
     }
 
     async rechazarReserva(parametros: AprobarReservaDTO, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<Reserva> {

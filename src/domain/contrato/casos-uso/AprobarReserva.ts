@@ -4,6 +4,7 @@ import IBilleteraRepositorio from "../../billeteras/repositorios/BilleteraReposi
 import IServicioCore from "../../common/servicios/IServicioCore";
 import {IContratoBookBnB} from "../servicios/ContratoBookBnB";
 import {UseCase} from "../../UseCase";
+import Reserva from "../entidades/Reserva";
 
 export class AprobarReservaDTO {
     @IsString()
@@ -33,11 +34,11 @@ export class AprobarReserva implements UseCase {
     ) {
     }
 
-    public async execute(body: AprobarReservaDTO): Promise<void> {
-        const billeteraAnfitrion = await this.billeteras.obtener(body.anfitrionId)
-        const billeteraHuesped = await this.billeteras.obtener(body.huespedId)
+    public async execute(anfitrionId: string, huespedId: string, reserva: Reserva): Promise<void> {
+        const billeteraAnfitrion = await this.billeteras.obtener(anfitrionId)
+        const billeteraHuesped = await this.billeteras.obtener(huespedId)
 
-        this.contrato.aprobarReserva(body, billeteraAnfitrion, billeteraHuesped)
+        this.contrato.aprobarReserva(reserva, billeteraAnfitrion, billeteraHuesped)
             .then((reserva) => {
                 this.servicioCore.notificarReservaAprobada(reserva)
             })
