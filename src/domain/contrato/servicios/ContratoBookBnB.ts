@@ -12,7 +12,7 @@ export interface CrearPublicacion {
 
 export interface IContratoBookBnB {
     crearPublicacion(publicacion: Publicacion, billetera: Billetera): Promise<Publicacion>
-    crearReserva(body: CrearReservaDTO, billetera: Billetera): Promise<Reserva>;
+    crearReserva(reserva: Reserva, billetera: Billetera): Promise<Reserva>;
     aprobarReserva(body: AprobarReservaDTO, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<Reserva>;
     rechazarReserva(body: RechazarReservaDTO, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<Reserva>;
 }

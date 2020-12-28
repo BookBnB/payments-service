@@ -38,7 +38,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
         return publicacion
     }
 
-    async crearReserva(parametros: CrearReservaDTO, billetera: Billetera): Promise<Reserva> {
+    async crearReserva(reserva: Reserva, billetera: Billetera): Promise<Reserva> {
         const web3 = new Web3(
             new HDWalletProvider(billetera.palabras, process.env.NODE_URL)
         )
@@ -46,26 +46,22 @@ export class ContratoBookBnB implements IContratoBookBnB {
         const contract = new web3.eth.Contract(<any>ContractABI, process.env.CONTRACT_ADDRESS)
 
         const tx = await contract.methods.intentBookingBatch(
-            parametros.publicacionContratoId,
-            parametros.fechaInicio.getDate(),
-            parametros.fechaInicio.getMonth() + 1,
-            parametros.fechaInicio.getFullYear(),
-            parametros.fechaFin.getDate(),
-            parametros.fechaFin.getMonth() + 1,
-            parametros.fechaFin.getFullYear()
+            reserva.contratoId,
+            reserva.fechaInicio.getDate(),
+            reserva.fechaInicio.getMonth() + 1,
+            reserva.fechaInicio.getFullYear(),
+            reserva.fechaFin.getDate(),
+            reserva.fechaFin.getMonth() + 1,
+            reserva.fechaFin.getFullYear()
         )
 
-        const room: Room = await contract.methods.rooms(parametros.publicacionContratoId).call()
+        const room: Room = await contract.methods.rooms(reserva.contratoId).call()
 
-        const precioTotal = new BN(room.price).mul(new BN(parametros.dias()))
+        const precioTotal = new BN(room.price).mul(new BN(reserva.dias()))
 
         await this.ejecutar(tx, billetera, precioTotal);
 
-        return new Reserva({
-            id: parametros.reservaId,
-            fechaInicio: parametros.fechaInicio,
-            fechaFin: parametros.fechaFin
-        })
+        return reserva
     }
 
     async aprobarReserva(parametros: AprobarReservaDTO, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<Reserva> {
@@ -89,6 +85,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
         await this.ejecutar(tx, billeteraAnfitrion)
 
         return new Reserva({
+            contratoId: 0,
             id: parametros.reservaId,
             fechaInicio: parametros.fechaInicio,
             fechaFin: parametros.fechaFin
@@ -116,6 +113,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
         await this.ejecutar(tx, billeteraAnfitrion)
 
         return new Reserva({
+            contratoId: 0,
             id: parametros.reservaId,
             fechaInicio: parametros.fechaInicio,
             fechaFin: parametros.fechaFin

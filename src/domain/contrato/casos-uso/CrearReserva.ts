@@ -4,6 +4,7 @@ import IBilleteraRepositorio from "../../billeteras/repositorios/BilleteraReposi
 import IServicioCore from "../../common/servicios/IServicioCore";
 import {IContratoBookBnB} from "../servicios/ContratoBookBnB";
 import { UseCase } from "../../UseCase";
+import Reserva from "../entidades/Reserva";
 
 export class CrearReservaDTO {
     @IsString()
@@ -39,8 +40,14 @@ export class CrearReserva implements UseCase {
 
     async execute(body: CrearReservaDTO): Promise<void> {
         const billetera = await this.billeteras.obtener(body.huespedId)
-        
-        this.contrato.crearReserva(body, billetera)
+        const reserva = new Reserva({
+            id: body.reservaId,
+            contratoId: body.publicacionContratoId,
+            fechaInicio: body.fechaInicio,
+            fechaFin: body.fechaFin
+        })
+
+        this.contrato.crearReserva(reserva, billetera)
             .then((reserva) => {
                 this.servicioCore.notificarReservaCreada(reserva)
             })
