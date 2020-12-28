@@ -19,5 +19,8 @@ export class CrearPublicacion implements UseCase {
             .then(() => {
                 this.servicioCore.notificarPublicacionCreada(publicacion)
             })
+            .catch(() => {
+                this.servicioCore.notificarPublicacionRechazada(publicacion)
+            })
     }
 }

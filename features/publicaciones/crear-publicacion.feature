@@ -13,4 +13,4 @@ Característica:
 
   Escenario: Creación Fallida - Precio nulo
     Cuando creo una publicación con precio por noche 0 eth
-    Entonces no se emite ningún evento
+    Entonces se emite un evento de rechazo de la publicación
