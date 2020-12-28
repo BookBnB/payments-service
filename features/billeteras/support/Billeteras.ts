@@ -8,7 +8,7 @@ export default class Billeteras extends Recurso {
     }
 
     public static async crear(context: any, usuarioId: any) {
-        await this.post(context, `/${usuarioId}`, {})
+        await this.post(context, '', {id: usuarioId})
     }
 
     public static async listar(context: any) {

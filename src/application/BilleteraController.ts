@@ -1,4 +1,4 @@
-import {HttpCode, HttpError, JsonController, Params, Post} from "routing-controllers";
+import {Body, HttpCode, HttpError, JsonController, Post} from "routing-controllers";
 import {OpenAPI, ResponseSchema} from "routing-controllers-openapi";
 import {CrearBilletera} from "../domain/billeteras/casos-uso/CrearBilletera";
 import BilleteraDTO from "../domain/billeteras/dtos/BilleteraDTO";
@@ -13,11 +13,11 @@ export class BilleteraController {
     ) {
     }
 
-    @Post('/:id')
+    @Post('')
     @HttpCode(201)
     @ResponseSchema(BilleteraDTO)
     @OpenAPI({summary: 'Crea una billetera'})
-    async crear(@Params() id: UUID): Promise<BilleteraDTO> {
+    async crear(@Body() id: UUID): Promise<BilleteraDTO> {
         try {
             return await this.crearBilletera.execute(id);
         } catch (e) {
