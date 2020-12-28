@@ -28,6 +28,15 @@ export default class Reserva {
         const timeDiff = this.fechaFin.getTime() - this.fechaInicio.getTime()
 
         // +1 porque el mismo dia también cuenta
-        return Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1
+        return Math.ceil(timeDiff / (1000 * 60 * 60 * 24))
+    }
+
+    public getNocheInicio(): Date {
+        return this.fechaInicio
+    }
+
+    public getNocheFin(): Date {
+        const dateOffset = (24 * 60 * 60 * 1000) // 1 days
+        return new Date(this.fechaFin.getTime() - dateOffset)
     }
 }

@@ -43,12 +43,12 @@ export class ContratoBookBnB implements IContratoBookBnB {
 
         const tx = await contract.methods.intentBookingBatch(
             reserva.contratoId,
-            reserva.fechaInicio.getDate(),
-            reserva.fechaInicio.getMonth() + 1,
-            reserva.fechaInicio.getFullYear(),
-            reserva.fechaFin.getDate(),
-            reserva.fechaFin.getMonth() + 1,
-            reserva.fechaFin.getFullYear()
+            reserva.getNocheInicio().getDate(),
+            reserva.getNocheInicio().getMonth() + 1,
+            reserva.getNocheInicio().getFullYear(),
+            reserva.getNocheFin().getDate(),
+            reserva.getNocheFin().getMonth() + 1,
+            reserva.getNocheFin().getFullYear()
         )
 
         const room: Room = await contract.methods.rooms(reserva.contratoId).call()
@@ -68,12 +68,12 @@ export class ContratoBookBnB implements IContratoBookBnB {
         const tx = await contract.methods.acceptBatch(
             reserva.contratoId,
             billeteraHuesped.direccion,
-            reserva.fechaInicio.getDate(),
-            reserva.fechaInicio.getMonth() + 1,
-            reserva.fechaInicio.getFullYear(),
-            reserva.fechaFin.getDate(),
-            reserva.fechaFin.getMonth() + 1,
-            reserva.fechaFin.getFullYear()
+            reserva.getNocheInicio().getDate(),
+            reserva.getNocheInicio().getMonth() + 1,
+            reserva.getNocheInicio().getFullYear(),
+            reserva.getNocheFin().getDate(),
+            reserva.getNocheFin().getMonth() + 1,
+            reserva.getNocheFin().getFullYear()
         )
 
         await ContratoBookBnB.ejecutar(tx, billeteraAnfitrion)
@@ -89,12 +89,12 @@ export class ContratoBookBnB implements IContratoBookBnB {
         const tx = await contract.methods.rejectBatch(
             reserva.contratoId,
             billeteraHuesped.direccion,
-            reserva.fechaInicio.getDate(),
-            reserva.fechaInicio.getMonth() + 1,
-            reserva.fechaInicio.getFullYear(),
-            reserva.fechaFin.getDate(),
-            reserva.fechaFin.getMonth() + 1,
-            reserva.fechaFin.getFullYear()
+            reserva.getNocheInicio().getDate(),
+            reserva.getNocheInicio().getMonth() + 1,
+            reserva.getNocheInicio().getFullYear(),
+            reserva.getNocheFin().getDate(),
+            reserva.getNocheFin().getMonth() + 1,
+            reserva.getNocheFin().getFullYear()
         )
 
         await ContratoBookBnB.ejecutar(tx, billeteraAnfitrion)
