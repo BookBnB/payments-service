@@ -18,3 +18,8 @@ Característica:
     Dado que soy un usuario con email 'anfitrion@book.bnb' con una billetera con 0 ethers
     Cuando creo una publicación con precio por noche 1 eth
     Entonces se emite un evento de rechazo de la publicación
+
+  Escenario: Creación Fallida - Fondos insuficientes
+    Dado que soy un usuario con email 'anfitrion@book.bnb' con una billetera con 0.0001 ethers
+    Cuando creo una publicación con precio por noche 1 eth
+    Entonces se emite un evento de rechazo de la publicación
