@@ -1,7 +1,7 @@
 import axios from "axios";
 import IServicioCore from "../../domain/common/servicios/IServicioCore";
-import Reserva from "../../domain/reservas/entidades/Reserva";
-import Publicacion from "../../domain/publicaciones/entidades/Publicacion";
+import Reserva from "../../domain/contrato/entidades/Reserva";
+import Publicacion from "../../domain/contrato/entidades/Publicacion";
 
 export enum TipoEvento {
     PUBLICACION_CREADA = 'PUBLICACION_CREADA',

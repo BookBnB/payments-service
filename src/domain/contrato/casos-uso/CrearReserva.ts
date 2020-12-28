@@ -2,7 +2,7 @@ import { Type } from "class-transformer";
 import { IsDate, IsNumber, IsString, IsUUID } from "class-validator";
 import IBilleteraRepositorio from "../../billeteras/repositorios/BilleteraRepositorio";
 import IServicioCore from "../../common/servicios/IServicioCore";
-import { IContratoBookBnB } from "../../contratos/ContratoBookBnB";
+import {IContratoBookBnB} from "../servicios/ContratoBookBnB";
 import { UseCase } from "../../UseCase";
 
 export class CrearReservaDTO {

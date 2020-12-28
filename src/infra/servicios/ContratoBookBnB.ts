@@ -4,12 +4,12 @@ import { TransactionReceipt } from 'web3-eth';
 import { abi as ContractABI } from "../../contracts/BnBooking.json";
 import Billetera from "../../domain/billeteras/entidades/Billetera";
 import TransaccionRevertidaError from "../../domain/common/excepciones/TransaccionRevertidaError";
-import {IContratoBookBnB} from "../../domain/contratos/ContratoBookBnB";
-import { CrearReservaDTO } from "../../domain/reservas/casos-uso/CrearReserva";
-import Reserva from "../../domain/reservas/entidades/Reserva";
+import {IContratoBookBnB} from "../../domain/contrato/servicios/ContratoBookBnB";
+import { CrearReservaDTO } from "../../domain/contrato/casos-uso/CrearReserva";
+import Reserva from "../../domain/contrato/entidades/Reserva";
 import BN from "bn.js"
-import { AprobarReservaDTO } from "../../domain/reservas/casos-uso/AprobarReserva";
-import Publicacion from "../../domain/publicaciones/entidades/Publicacion";
+import { AprobarReservaDTO } from "../../domain/contrato/casos-uso/AprobarReserva";
+import Publicacion from "../../domain/contrato/entidades/Publicacion";
 
 interface Room {
     roomId: BN

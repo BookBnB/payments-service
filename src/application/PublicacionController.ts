@@ -1,6 +1,6 @@
 import { Body, HttpCode, JsonController, Post } from "routing-controllers";
 import { OpenAPI, ResponseSchema } from "routing-controllers-openapi";
-import { CrearPublicacion, CrearPublicacionDTO } from "../domain/publicaciones/casos-uso/CrearPublicacion";
+import { CrearPublicacion, CrearPublicacionDTO } from "../domain/contrato/casos-uso/CrearPublicacion";
 import Result from "./common/Result";
 
 @OpenAPI({ security: [{basicAuth: []}] })

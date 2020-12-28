@@ -1,9 +1,9 @@
-import Billetera from "../billeteras/entidades/Billetera";
-import { AprobarReservaDTO } from "../reservas/casos-uso/AprobarReserva";
-import { CrearReservaDTO } from "../reservas/casos-uso/CrearReserva";
-import { RechazarReservaDTO } from "../reservas/casos-uso/RechazarReserva";
-import Reserva from "../reservas/entidades/Reserva";
-import Publicacion from "../publicaciones/entidades/Publicacion";
+import Billetera from "../../billeteras/entidades/Billetera";
+import { AprobarReservaDTO } from "../casos-uso/AprobarReserva";
+import { CrearReservaDTO } from "../casos-uso/CrearReserva";
+import { RechazarReservaDTO } from "../casos-uso/RechazarReserva";
+import Reserva from "../entidades/Reserva";
+import Publicacion from "../entidades/Publicacion";
 
 
 export interface CrearPublicacion {

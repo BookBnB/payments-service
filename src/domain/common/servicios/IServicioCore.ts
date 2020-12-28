@@ -1,5 +1,5 @@
-import Reserva from "../../reservas/entidades/Reserva";
-import Publicacion from "../../publicaciones/entidades/Publicacion";
+import Reserva from "../../contrato/entidades/Reserva";
+import Publicacion from "../../contrato/entidades/Publicacion";
 
 export default interface IServicioCore {
     notificarPublicacionCreada(publicacion: Publicacion): Promise<void>

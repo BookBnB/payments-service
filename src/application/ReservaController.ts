@@ -1,8 +1,8 @@
 import { Body, HttpCode, JsonController, Post, Put } from "routing-controllers";
 import { OpenAPI, ResponseSchema } from "routing-controllers-openapi";
-import { AprobarReserva, AprobarReservaDTO } from "../domain/reservas/casos-uso/AprobarReserva";
-import { CrearReserva, CrearReservaDTO } from "../domain/reservas/casos-uso/CrearReserva";
-import { RechazarReserva, RechazarReservaDTO } from "../domain/reservas/casos-uso/RechazarReserva";
+import { AprobarReserva, AprobarReservaDTO } from "../domain/contrato/casos-uso/AprobarReserva";
+import { CrearReserva, CrearReservaDTO } from "../domain/contrato/casos-uso/CrearReserva";
+import { RechazarReserva, RechazarReservaDTO } from "../domain/contrato/casos-uso/RechazarReserva";
 import Result from "./common/Result";
 
 @OpenAPI({ security: [{basicAuth: []}] })
