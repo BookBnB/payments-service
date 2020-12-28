@@ -1,5 +1,5 @@
 import {Type} from "class-transformer";
-import {IsDate, IsNumber, IsString, IsUUID} from "class-validator";
+import {IsDate, IsNumber, IsUUID} from "class-validator";
 import IBilleteraRepositorio from "../../billeteras/repositorios/BilleteraRepositorio";
 import IServicioCore from "../../common/servicios/IServicioCore";
 import {IContratoBookBnB} from "../servicios/ContratoBookBnB";
@@ -7,17 +7,17 @@ import {UseCase} from "../../UseCase";
 import Reserva from "../entidades/Reserva";
 
 export class AprobarReservaDTO {
-    @IsString()
+    @IsUUID(4)
     public reservaId!: string
+
+    @IsNumber()
+    public publicacionContratoId!: number
 
     @IsUUID(4)
     public anfitrionId!: string
 
     @IsUUID(4)
     public huespedId!: string
-
-    @IsNumber()
-    public publicacionContratoId!: number
 
     @IsDate() @Type(() => Date)
     public fechaInicio!: Date
