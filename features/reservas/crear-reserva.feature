@@ -23,6 +23,11 @@ Característica:
     Cuando creo una reserva del '2020-12-01' al '2020-12-10'
     Entonces se emite un evento de rechazo de la reserva
 
+  Escenario: Creación fallida - Fondos insuficientes por comisión
+    Dado que soy un usuario con email 'huesped@book.bnb' con una billetera con 1 ethers
+    Cuando creo una reserva del '2020-12-01' al '2020-12-10'
+    Entonces se emite un evento de rechazo de la reserva
+
   Escenario: Creación fallida - Cupo alcanzado
     Dado que soy un usuario con email 'huesped_sin_cupo@book.bnb' con una billetera con 100 ethers
     Y que el usuario con email 'huesped1@book.bnb' tiene una billetera con 100 ethers
