@@ -47,7 +47,7 @@ Given('que el usuario con email {string} tiene una billetera con {float} ethers'
     await crearBilleteraConSaldo.bind(this)(email, saldo)
 });
 
-Given('que soy un usuario con email {string} con una billetera con {int} ethers', async function (email, monto) {
+Given('que soy un usuario con email {string} con una billetera con {float} ethers', async function (email, monto) {
     await crearBilleteraConSaldo.bind(this)(email, monto)
     this.emailUsuarioActual = email
 });

@@ -47,7 +47,7 @@ When('creo una publicación con precio por noche {float} eth', async function (p
     await crearPublicacion.bind(this)(precioPorNoche, this.billeteras[idUsuario])
 });
 
-Then('se emite un evento para la nueva publicación', async function () {
+Then('se emite un evento de confirmación de la nueva publicación', async function () {
     await esperarEventoCreacionPublicacion.bind(this)(this.datosUltimaPublicacion.id)
 });
 

@@ -19,5 +19,8 @@ export class CrearReserva implements UseCase {
             .then(() => {
                 this.servicioCore.notificarReservaCreada(reserva)
             })
+            .catch(() => {
+                this.servicioCore.notificarReservaRechazada(reserva)
+            })
     }
 }

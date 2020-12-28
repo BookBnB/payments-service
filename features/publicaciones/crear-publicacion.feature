@@ -7,7 +7,7 @@ Característica:
   Escenario: Creación Exitosa
     Dado que soy un usuario con email 'anfitrion@book.bnb' con una billetera con 100 ethers
     Cuando creo una publicación con precio por noche 1.554 eth
-    Entonces se emite un evento para la nueva publicación
+    Entonces se emite un evento de confirmación de la nueva publicación
 
   Escenario: Creación Fallida - Precio nulo
     Dado que soy un usuario con email 'anfitrion@book.bnb' con una billetera con 100 ethers

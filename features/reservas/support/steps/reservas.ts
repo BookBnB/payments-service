@@ -75,7 +75,7 @@ When('rechazo la reserva del usuario con email {string}', async function (huespe
     await Reservas.rechazar(this, this.datosRechazo)
 });
 
-Then('se emite un evento para la nueva reserva', async function () {
+Then('se emite un evento de confirmación de la creación de la nueva reserva', async function () {
     await esperarEventoCreacionReserva.bind(this)()
 });
 
@@ -108,7 +108,7 @@ Then('se emite un evento de rechazo de la reserva', async function () {
 
     await esperarA(function (contexto) {
         return contexto.mockServicioCore.notificarReservaRechazada.calledWithMatch({
-            id: contexto.datosRechazo.reservaId
+            id: contexto.datosReserva.reservaId
         })
     }, this)
 })
