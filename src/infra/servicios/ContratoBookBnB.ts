@@ -5,7 +5,6 @@ import { abi as ContractABI } from "../../contracts/BnBooking.json";
 import Billetera from "../../domain/billeteras/entidades/Billetera";
 import TransaccionRevertidaError from "../../domain/common/excepciones/TransaccionRevertidaError";
 import {IContratoBookBnB} from "../../domain/contrato/servicios/ContratoBookBnB";
-import { CrearReservaDTO } from "../../domain/contrato/casos-uso/CrearReserva";
 import Reserva from "../../domain/contrato/entidades/Reserva";
 import BN from "bn.js"
 import { AprobarReservaDTO } from "../../domain/contrato/casos-uso/AprobarReserva";

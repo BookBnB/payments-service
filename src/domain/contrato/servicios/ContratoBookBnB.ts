@@ -1,6 +1,5 @@
 import Billetera from "../../billeteras/entidades/Billetera";
 import { AprobarReservaDTO } from "../casos-uso/AprobarReserva";
-import { CrearReservaDTO } from "../casos-uso/CrearReserva";
 import { RechazarReservaDTO } from "../casos-uso/RechazarReserva";
 import Reserva from "../entidades/Reserva";
 import Publicacion from "../entidades/Publicacion";
