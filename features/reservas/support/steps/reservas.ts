@@ -79,18 +79,6 @@ Then('se emite un evento de confirmación de la creación de la nueva reserva', 
     await esperarEventoCreacionReserva.bind(this)()
 });
 
-Then('no se emite un evento para la nueva reserva', async function () {
-    // TODO: borrar porque se debe emitir un evento de reserva rechazada
-    // expect(this.mockServicioCore.notificar).to.not.have.been.calledWith({
-    //     tipo: TipoEvento.NUEVA_RESERVA,
-    //     payload: {
-    //         reservaId: this.datosReserva.reservaId,
-    //         fechaInicio: this.datosReserva.fechaInicio,
-    //         fechaFin: this.datosReserva.fechaFin
-    //     }
-    // })
-})
-
 Then('se emite un evento de aceptación de la reserva', async function () {
     expect(this.last_response).to.have.status(200)
     expect(this.last_response).to.be.json
