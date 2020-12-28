@@ -4,6 +4,7 @@ import IBilleteraRepositorio from "../../billeteras/repositorios/BilleteraReposi
 import IServicioCore from "../../common/servicios/IServicioCore";
 import {IContratoBookBnB} from "../servicios/ContratoBookBnB";
 import { UseCase } from "../../UseCase";
+import Reserva from "../entidades/Reserva";
 
 export class RechazarReservaDTO {
     @IsUUID(4)
@@ -33,12 +34,12 @@ export class RechazarReserva implements UseCase {
     ) {
     }
 
-    public async execute(body: RechazarReservaDTO): Promise<void> {
-        const billeteraAnfitrion = await this.billeteras.obtener(body.anfitrionId)
-        const billeteraHuesped = await this.billeteras.obtener(body.huespedId)
+    public async execute(anfitrionId: string, huespedId: string, reserva: Reserva): Promise<void> {
+        const billeteraAnfitrion = await this.billeteras.obtener(anfitrionId)
+        const billeteraHuesped = await this.billeteras.obtener(huespedId)
 
-        this.contrato.rechazarReserva(body, billeteraAnfitrion, billeteraHuesped)
-            .then((reserva) => {
+        this.contrato.rechazarReserva(reserva, billeteraAnfitrion, billeteraHuesped)
+            .then(() => {
                 this.servicioCore.notificarReservaRechazada(reserva)
             })
     }

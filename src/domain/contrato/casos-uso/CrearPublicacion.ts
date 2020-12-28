@@ -26,12 +26,13 @@ export class CrearPublicacion implements UseCase {
 
     async execute(body: CrearPublicacionDTO): Promise<void> {
         const billetera = await this.billeteras.obtener(body.usuarioId)
-
-        this.contrato.crearPublicacion(new Publicacion({
+        const publicacion = new Publicacion({
             id: body.publicacionId,
             precioPorNoche: body.precioPorNoche
-        }), billetera)
-            .then(publicacion => {
+        })
+
+        this.contrato.crearPublicacion(publicacion, billetera)
+            .then(() => {
                 this.servicioCore.notificarPublicacionCreada(publicacion)
             })
     }

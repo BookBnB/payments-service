@@ -35,7 +35,7 @@ export class CrearReserva implements UseCase {
         const billetera = await this.billeteras.obtener(huespedId)
 
         this.contrato.crearReserva(reserva, billetera)
-            .then((reserva) => {
+            .then(() => {
                 this.servicioCore.notificarReservaCreada(reserva)
             })
     }

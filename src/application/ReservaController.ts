@@ -48,7 +48,12 @@ export class ReservaController {
     @ResponseSchema(Result)
     @OpenAPI({summary: 'Aprueba un intento de reserva para una publicación'})
     async rechazar(@Body() body: RechazarReservaDTO): Promise<Result> {
-        await this.rechazarReserva.execute(body)
+        await this.rechazarReserva.execute(body.anfitrionId, body.huespedId, new Reserva({
+            id: body.reservaId,
+            contratoId: body.publicacionContratoId,
+            fechaInicio: body.fechaInicio,
+            fechaFin: body.fechaFin
+        }))
 
         return Result.success()
     }
