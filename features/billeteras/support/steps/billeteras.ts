@@ -29,7 +29,11 @@ export async function crearBilleteraConSaldo(this: any, email: string, monto: nu
 }
 
 export function billeteraActual(this: any) {
-    const idUsuario = this.usuarios.get(this.emailUsuarioActual)
+    return billeteraDeUsuario.bind(this)(this.emailUsuarioActual)
+}
+
+export function billeteraDeUsuario(this: any, emailUsuario: string) {
+    const idUsuario = this.usuarios.get(emailUsuario)
     return this.billeteras[idUsuario]
 }
 
