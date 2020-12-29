@@ -1,9 +1,13 @@
-import {Given, When, Then, TableDefinition} from "cucumber";
-import chai from "chai"
-import chaiHttp from "chai-http"
+import HDWalletProvider from "@truffle/hdwallet-provider";
+import { DIContainer } from "@wessberg/di";
+import BN from 'bn.js';
+import chai from "chai";
+import chaiHttp from "chai-http";
+import { Given, TableDefinition, Then, When } from "cucumber";
+import { v4 as uuid } from "uuid";
 import Web3 from "web3";
+import IBilleteraRepositorio from "../../../../src/domain/billeteras/repositorios/BilleteraRepositorio";
 import Billeteras from "../Billeteras";
-import {v4 as uuid} from "uuid";
 
 chai.use(chaiHttp);
 
@@ -37,6 +41,40 @@ export function billeteraDeUsuario(this: any, emailUsuario: string) {
     return this.billeteras[idUsuario]
 }
 
+async function llevarBilleteraASaldo(this: any, emailUsuario: string, fondos: number) {
+    const container: DIContainer = this.container
+    const repoBilleteras: IBilleteraRepositorio = container.get<IBilleteraRepositorio>()
+
+    const billeteraDTO = billeteraDeUsuario.bind(this)(emailUsuario)
+    const billetera = await repoBilleteras.obtener(billeteraDTO.usuarioId)
+
+    const web3Usuario = new Web3(
+        new HDWalletProvider(billetera.palabras, process.env.NODE_URL)
+    )
+
+    // vaciamos la billetera
+    const gasTransferencia = new BN(21000)
+    const gasPrice = new BN(await web3Usuario.eth.getGasPrice())
+    const fee = gasTransferencia.mul(gasPrice)
+
+    const balanceActual = new BN(await web3Usuario.eth.getBalance(billeteraDTO.direccion))
+    await web3Usuario.eth.sendTransaction({
+        from: billetera.direccion,
+        to: this.web3.eth.defaultAccount,
+        value: balanceActual.sub(fee)
+    })
+
+    // recargamos con los fondos deseados
+    const saldoRestante = new BN(await this.web3.utils.toWei(fondos.toString()))
+    await this.web3.eth.sendTransaction({
+        to: billetera.direccion,
+        value: saldoRestante
+    })
+
+    const saldoActual = new BN(await this.web3.eth.getBalance(billetera.direccion))
+    expect(saldoActual).to.eql(saldoRestante)
+}
+
 Given('que no existen billeteras', function () {
 });
 
@@ -54,6 +92,14 @@ Given('que el usuario con email {string} tiene una billetera con {float} ethers'
 Given('que soy un usuario con email {string} con una billetera con {float} ethers', async function (email, monto) {
     await crearBilleteraConSaldo.bind(this)(email, monto)
     this.emailUsuarioActual = email
+});
+
+Given('que me quedan {float} ethers en mi billetera', async function (fondos) {
+    await llevarBilleteraASaldo.bind(this)(this.emailUsuarioActual, fondos)
+});
+
+Given('que al usuario con email {string} le quedan {float} ethers en su billetera', async function (emailUsuario, fondos) {
+    await llevarBilleteraASaldo.bind(this)(emailUsuario, fondos)
 });
 
 When('creo una billetera para el usuario de id {string}', async function (id: string) {

@@ -24,7 +24,6 @@ Característica:
     Cuando apruebo la reserva del usuario con email 'huesped@book.bnb'
     Entonces se emite un evento de aprobación de reserva fallida
 
-  @wip
   Escenario: Aprobación exitosa - Huesped sin fondos
     Dado que al usuario con email 'huesped@book.bnb' le quedan 0 ethers en su billetera
     Cuando apruebo la reserva del usuario con email 'huesped@book.bnb'

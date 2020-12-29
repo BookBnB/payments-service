@@ -1,13 +1,7 @@
-import HDWalletProvider from "@truffle/hdwallet-provider";
-import { DIContainer } from "@wessberg/di";
-import BN from 'bn.js';
 import chai from "chai";
-import { Given, Then, When } from 'cucumber';
+import { Then, When } from 'cucumber';
 import sinonChai from "sinon-chai";
 import { v4 as uuid } from "uuid";
-import Web3 from "web3";
-import IBilleteraRepositorio from "../../../../src/domain/billeteras/repositorios/BilleteraRepositorio";
-import { billeteraActual } from "../../../billeteras/support/steps/billeteras";
 import { esperarA } from '../../../util/utils';
 import Reservas from '../Reservas';
 
@@ -35,44 +29,6 @@ async function esperarEventoCreacionReserva(this: any) {
         })
     }, this)
 }
-
-Given('que me quedan {float} ethers en mi billetera', async function (fondos) {
-    const container: DIContainer = this.container
-    const repoBilleteras: IBilleteraRepositorio = container.get<IBilleteraRepositorio>()
-
-    const billeteraDTO = billeteraActual.bind(this)()
-    const billetera = await repoBilleteras.obtener(billeteraDTO.usuarioId)
-
-    const web3Usuario = new Web3(
-        new HDWalletProvider(billetera.palabras, process.env.NODE_URL)
-    )
-
-    // vaciamos la billetera
-    const gasTransferencia = new BN(21000)
-    const gasPrice = new BN(await web3Usuario.eth.getGasPrice())
-    const fee = gasTransferencia.mul(gasPrice)
-
-    const balanceActual = new BN(await web3Usuario.eth.getBalance(billeteraDTO.direccion))
-    await web3Usuario.eth.sendTransaction({
-        from: billetera.direccion,
-        to: this.web3.eth.defaultAccount,
-        value: balanceActual.sub(fee)
-    })
-
-    // recargamos con los fondos deseados
-    const saldoRestante = new BN(await this.web3.utils.toWei(fondos.toString()))
-    await this.web3.eth.sendTransaction({
-        to: billetera.direccion,
-        value: saldoRestante
-    })
-
-    const saldoActual = new BN(await this.web3.eth.getBalance(billetera.direccion))
-    expect(saldoActual).to.eql(saldoRestante)
-});
-
-Given('que al usuario con email {string} le quedan {float} ethers en su billetera', async function (email, fondosRestantes) {
-
-});
 
 When('creo una reserva del {string} al {string}', async function (fechaInicio, fechaFin) {
     await crearReserva.bind(this)({
