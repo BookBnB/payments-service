@@ -15,7 +15,19 @@ Característica:
     Entonces se emite un evento de rechazo de la reserva
 
   @wip
-  Escenario: Rechazo fallido - Fondos insuficientes del anfitrión
+  Escenario: Rechazo fallido - Anfitrión sin fondos
     Dado que me quedan 0 ethers en mi billetera
+    Cuando rechazo la reserva del usuario con email 'huesped@book.bnb'
+    Entonces se emite un evento de rechazo de reserva fallida
+
+  @wip
+  Escenario: Rechazo fallido - Fondos insuficientes del anfitrión
+    Dado que me quedan 0.0001 ethers en mi billetera
+    Cuando rechazo la reserva del usuario con email 'huesped@book.bnb'
+    Entonces se emite un evento de rechazo de reserva fallida
+
+  @wip
+  Escenario: Rechazo exitoso - Huesped sin fondos
+    Dado que al usuario con email 'huesped@book.bnb' le quedan 0 ethers en su billetera
     Cuando rechazo la reserva del usuario con email 'huesped@book.bnb'
     Entonces se emite un evento de rechazo de la reserva
