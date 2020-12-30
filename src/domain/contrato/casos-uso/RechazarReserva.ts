@@ -20,5 +20,8 @@ export class RechazarReserva implements UseCase {
             .then(() => {
                 this.servicioCore.notificarReservaRechazada(reserva)
             })
+            .catch(() => {
+                this.servicioCore.notificarRechazoDeReservaFallida(reserva)
+            })
     }
 }

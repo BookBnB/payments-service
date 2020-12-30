@@ -9,7 +9,8 @@ export enum TipoEvento {
     RESERVA_CREADA = "RESERVA_CREADA",
     RESERVA_ACEPTADA = "RESERVA_ACEPTADA",
     RESERVA_RECHAZADA = "RESERVA_RECHAZADA",
-    RESERVA_ACEPTACION_FALLIDA = "RESERVA_ACEPTACION_FALLIDA"
+    RESERVA_ACEPTACION_FALLIDA = "RESERVA_ACEPTACION_FALLIDA",
+    RESERVA_RECHAZO_FALLIDO = "RESERVA_RECHAZO_FALLIDO"
 }
 
 class Evento {
@@ -65,6 +66,12 @@ export default class ServicioCore implements IServicioCore {
 
     async notificarAprobacionDeReservaFallida(reserva: Reserva): Promise<void> {
         await this.notificar(new Evento(TipoEvento.RESERVA_ACEPTACION_FALLIDA, {
+            reservaId: reserva.id
+        }))
+    }
+
+    async notificarRechazoDeReservaFallida(reserva: Reserva): Promise<void> {
+        await this.notificar(new Evento(TipoEvento.RESERVA_RECHAZO_FALLIDO, {
             reservaId: reserva.id
         }))
     }

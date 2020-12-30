@@ -111,3 +111,14 @@ Then('se emite un evento de aprobación de reserva fallida', async function () {
         })
     }, this)
 })
+
+Then('se emite un evento de rechazo de reserva fallida', async function () {
+    expect(this.last_response).to.have.status(200)
+    expect(this.last_response).to.be.json
+
+    await esperarA(function (contexto) {
+        return contexto.mockServicioCore.notificarRechazoDeReservaFallida.calledWithMatch({
+            id: contexto.datosReserva.reservaId
+        })
+    }, this)
+});

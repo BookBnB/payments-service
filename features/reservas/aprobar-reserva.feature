@@ -14,6 +14,11 @@ Característica:
     Cuando apruebo la reserva del usuario con email 'huesped@book.bnb'
     Entonces se emite un evento de aceptación de la reserva
 
+  Escenario: Aprobación exitosa - Huésped sin fondos
+    Dado que al usuario con email 'huesped@book.bnb' le quedan 0 ethers en su billetera
+    Cuando apruebo la reserva del usuario con email 'huesped@book.bnb'
+    Entonces se emite un evento de aceptación de la reserva
+
   Escenario: Aprobación fallida - Anfitrión sin fondos
     Dado que me quedan 0 ethers en mi billetera
     Cuando apruebo la reserva del usuario con email 'huesped@book.bnb'
@@ -23,8 +28,3 @@ Característica:
     Dado que me quedan 0.0001 ethers en mi billetera
     Cuando apruebo la reserva del usuario con email 'huesped@book.bnb'
     Entonces se emite un evento de aprobación de reserva fallida
-
-  Escenario: Aprobación exitosa - Huesped sin fondos
-    Dado que al usuario con email 'huesped@book.bnb' le quedan 0 ethers en su billetera
-    Cuando apruebo la reserva del usuario con email 'huesped@book.bnb'
-    Entonces se emite un evento de aceptación de la reserva
