@@ -51,12 +51,12 @@ Then('se emite un evento de confirmación de la nueva publicación', async funct
     await esperarEventoCreacionPublicacion.bind(this)(this.datosUltimaPublicacion.id)
 });
 
-Then('se emite un evento de rechazo de la publicación', async function () {
+Then('se emite un evento de creación de la publicación fallida', async function () {
     expect(this.last_response).to.have.status(200)
     expect(this.last_response).to.be.json
 
     await esperarA(function (contexto) {
-        return contexto.mockServicioCore.notificarPublicacionRechazada.calledWithMatch({
+        return contexto.mockServicioCore.notificarCreacionDePublicacionFallida.calledWithMatch({
             id: contexto.datosUltimaPublicacion.id
         })
     }, this)

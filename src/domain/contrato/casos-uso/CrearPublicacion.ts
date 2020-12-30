@@ -20,7 +20,7 @@ export class CrearPublicacion implements UseCase {
                 this.servicioCore.notificarPublicacionCreada(publicacion)
             })
             .catch(() => {
-                this.servicioCore.notificarPublicacionRechazada(publicacion)
+                this.servicioCore.notificarCreacionDePublicacionFallida(publicacion)
             })
     }
 }

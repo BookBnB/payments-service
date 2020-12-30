@@ -5,10 +5,11 @@ import Publicacion from "../../domain/contrato/entidades/Publicacion";
 
 export enum TipoEvento {
     PUBLICACION_CREADA = 'PUBLICACION_CREADA',
-    PUBLICACION_RECHAZADA = 'PUBLICACION_RECHAZADA',
     RESERVA_CREADA = "RESERVA_CREADA",
     RESERVA_ACEPTADA = "RESERVA_ACEPTADA",
     RESERVA_RECHAZADA = "RESERVA_RECHAZADA",
+    PUBLICACION_CREACION_FALLIDA = 'PUBLICACION_CREACION_FALLIDA',
+    RESERVA_CREACION_FALLIDA = "RESERVA_CREACION_FALLIDA",
     RESERVA_ACEPTACION_FALLIDA = "RESERVA_ACEPTACION_FALLIDA",
     RESERVA_RECHAZO_FALLIDO = "RESERVA_RECHAZO_FALLIDO"
 }
@@ -40,12 +41,6 @@ export default class ServicioCore implements IServicioCore {
         }))
     }
 
-    async notificarPublicacionRechazada(publicacion: Publicacion): Promise<void> {
-        await this.notificar(new Evento(TipoEvento.PUBLICACION_RECHAZADA,{
-            publicacionId: publicacion.id
-        }))
-    }
-
     async notificarReservaCreada(reserva: Reserva): Promise<void> {
         await this.notificar(new Evento(TipoEvento.RESERVA_CREADA,{
             reservaId: reserva.id
@@ -62,6 +57,18 @@ export default class ServicioCore implements IServicioCore {
         await this.notificar(new Evento(TipoEvento.RESERVA_RECHAZADA,{
             reservaId: reserva.id
         }));
+    }
+
+    async notificarCreacionDePublicacionFallida(publicacion: Publicacion): Promise<void> {
+        await this.notificar(new Evento(TipoEvento.PUBLICACION_CREACION_FALLIDA,{
+            publicacionId: publicacion.id
+        }))
+    }
+
+    async notificarCreacionDeReservaFallida(reserva: Reserva): Promise<void> {
+        await this.notificar(new Evento(TipoEvento.RESERVA_CREACION_FALLIDA, {
+            reservaId: reserva.id
+        }))
     }
 
     async notificarAprobacionDeReservaFallida(reserva: Reserva): Promise<void> {

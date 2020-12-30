@@ -79,6 +79,17 @@ Then('se emite un evento de confirmación de la creación de la nueva reserva', 
     await esperarEventoCreacionReserva.bind(this)()
 });
 
+Then('se emite un evento de creación de la reserva fallida', async function () {
+    expect(this.last_response).to.have.status(200)
+    expect(this.last_response).to.be.json
+
+    await esperarA(function (contexto) {
+        return contexto.mockServicioCore.notificarCreacionDeReservaFallida.calledWithMatch({
+            id: contexto.datosReserva.reservaId
+        })
+    }, this)
+});
+
 Then('se emite un evento de aceptación de la reserva', async function () {
     expect(this.last_response).to.have.status(200)
     expect(this.last_response).to.be.json
