@@ -1,15 +1,13 @@
-export enum TipoEvento {
-    NUEVA_PUBLICACION = 'NUEVA_PUBLICACION',
-    NUEVA_RESERVA = "NUEVA_RESERVA",
-    RESERVA_ACEPTADA = "RESERVA_ACEPTADA",
-    RESERVA_RECHAZADA = "RESERVA_RECHAZADA"
-}
-
-export interface Evento {
-    tipo: TipoEvento
-    payload: any
-}
+import Reserva from "../../contrato/entidades/Reserva";
+import Publicacion from "../../contrato/entidades/Publicacion";
 
 export default interface IServicioCore {
-    notificar(evento: Evento): Promise<void>
+    notificarPublicacionCreada(publicacion: Publicacion): Promise<void>
+    notificarCreacionDePublicacionFallida(publicacion: Publicacion): Promise<void>;
+    notificarReservaCreada(reserva: Reserva): Promise<void>
+    notificarReservaAprobada(reserva: Reserva): Promise<void>
+    notificarReservaRechazada(reserva: Reserva): Promise<void>
+    notificarAprobacionDeReservaFallida(reserva: Reserva): Promise<void>;
+    notificarRechazoDeReservaFallida(reserva: Reserva): Promise<void>;
+    notificarCreacionDeReservaFallida(reserva: Reserva): Promise<void>;
 }

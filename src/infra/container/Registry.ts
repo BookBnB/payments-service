@@ -10,21 +10,23 @@ import Billetera from "../../domain/billeteras/entidades/Billetera";
 import IBilleteraRepositorio from "../../domain/billeteras/repositorios/BilleteraRepositorio";
 import { ICreadorBilleteras } from "../../domain/billeteras/servicios/CreadorBilleteras";
 import IServicioCore from "../../domain/common/servicios/IServicioCore";
-import { IContratoBookBnB } from "../../domain/contratos/ContratoBookBnB";
-import { CrearPublicacion } from "../../domain/publicaciones/casos-uso/CrearPublicacion";
-import { AprobarReserva } from "../../domain/reservas/casos-uso/AprobarReserva";
-import { CrearReserva } from "../../domain/reservas/casos-uso/CrearReserva";
-import { RechazarReserva } from "../../domain/reservas/casos-uso/RechazarReserva";
-import { ContratoBookBnB } from "../contratos/ContratoBookBnB";
+import { IContratoBookBnB } from "../../domain/contrato/servicios/ContratoBookBnB";
+import { CrearPublicacion } from "../../domain/contrato/casos-uso/CrearPublicacion";
+import { AprobarReserva } from "../../domain/contrato/casos-uso/AprobarReserva";
+import { CrearReserva } from "../../domain/contrato/casos-uso/CrearReserva";
+import { RechazarReserva } from "../../domain/contrato/casos-uso/RechazarReserva";
+import { ContratoBookBnB } from "../servicios/ContratoBookBnB";
 import { ErrorHandler } from "../ErrorHandler";
 import { BilleteraRepositorio } from "../repositories/BilleteraRepositorio";
 import CreadorBilleteras from "../servicios/CreadorBilleteras";
 import ServicioCore from "../servicios/ServicioCore";
 import typeOrmConnection from "../typeOrmConnection";
 import { IContainer } from "./Container";
+import Log4JSLogger, {ILogger} from "../logging/Logger";
 
 export default class Registry {
     public async registrar(container: DIContainer): Promise<IContainer> {
+        await this.registrarLogger(container)
         await this.registrarTypeOrmConnection(container);
         await this.registrarErrorHandler(container)
         await this.registrarWeb3(container);
@@ -35,6 +37,10 @@ export default class Registry {
         await this.registrarReservas(container)
 
         return container;
+    }
+
+    protected async registrarLogger(container: DIContainer) {
+        container.registerSingleton<ILogger>(() => new Log4JSLogger('App'));
     }
 
     protected async registrarTypeOrmConnection(container: DIContainer) {

@@ -1,8 +1,7 @@
 import chai from "chai";
-import { Then, When, World } from 'cucumber';
+import { Then, When } from 'cucumber';
 import sinonChai from "sinon-chai";
 import { v4 as uuid } from "uuid";
-import { TipoEvento } from '../../../../src/domain/common/servicios/IServicioCore';
 import { esperarA } from '../../../util/utils';
 import Reservas from '../Reservas';
 
@@ -25,27 +24,30 @@ async function esperarEventoCreacionReserva(this: any) {
     expect(this.last_response).to.be.json
 
     await esperarA(function (contexto) {
-        return contexto.mockServicioCore.notificar.calledWith({
-            tipo: TipoEvento.NUEVA_RESERVA,
-            payload: {
-                reservaId: contexto.datosReserva.reservaId,
-                fechaInicio: contexto.datosReserva.fechaInicio,
-                fechaFin: contexto.datosReserva.fechaFin
-            }
+        return contexto.mockServicioCore.notificarReservaCreada.calledWithMatch({
+            id: contexto.datosReserva.reservaId
         })
     }, this)
 }
 
-When('el usuario {string} crea una reserva del {string} al {string}', async function (id, fechaInicio, fechaFin) {
-    await crearReserva.bind(this)({ usuarioId: id, fechaInicio, fechaFin })
+When('creo una reserva del {string} al {string}', async function (fechaInicio, fechaFin) {
+    await crearReserva.bind(this)({
+        usuarioId: this.usuarios.get(this.emailUsuarioActual),
+        fechaInicio,
+        fechaFin
+    })
 });
 
-When('el usuario {string} crea exitosamente una reserva del {string} al {string}', async function (id, fechaInicio, fechaFin) {
-    await crearReserva.bind(this)({ usuarioId: id, fechaInicio, fechaFin })
+When(/^(?:que )el usuario con email '([^']*)' crea exitosamente una reserva del '([^']*)' al '([^']*)'$/, async function (email, fechaInicio, fechaFin) {
+    const usuarioId = this.usuarios.get(email)
+    await crearReserva.bind(this)({usuarioId: usuarioId, fechaInicio, fechaFin})
     await esperarEventoCreacionReserva.bind(this)()
 });
 
-When('el anfitrion {string} aprueba la reserva del usuario {string}', async function (anfitrionId, huespedId) {
+When('apruebo la reserva del usuario con email {string}', async function (huespedEmail) {
+    const anfitrionId = this.usuarios.get(this.emailUsuarioActual)
+    const huespedId = this.usuarios.get(huespedEmail)
+
     this.datosAprobacion = {
         reservaId: this.datosReserva.reservaId,
         publicacionContratoId: this.datosReserva.publicacionContratoId,
@@ -58,7 +60,9 @@ When('el anfitrion {string} aprueba la reserva del usuario {string}', async func
     await Reservas.aprobar(this, this.datosAprobacion)
 });
 
-When('el anfitrion {string} rechaza la reserva del usuario {string}', async function (anfitrionId, huespedId) {
+When('rechazo la reserva del usuario con email {string}', async function (huespedEmail) {
+    const anfitrionId = this.usuarios.get(this.emailUsuarioActual)
+    const huespedId = this.usuarios.get(huespedEmail)
     this.datosRechazo = {
         reservaId: this.datosReserva.reservaId,
         publicacionContratoId: this.datosReserva.publicacionContratoId,
@@ -71,33 +75,28 @@ When('el anfitrion {string} rechaza la reserva del usuario {string}', async func
     await Reservas.rechazar(this, this.datosRechazo)
 });
 
-Then('se emite un evento para la nueva reserva', async function () {
+Then('se emite un evento de confirmación de la creación de la nueva reserva', async function () {
     await esperarEventoCreacionReserva.bind(this)()
 });
 
-Then('no se emite un evento para la nueva reserva', async function () {
-    expect(this.mockServicioCore.notificar).to.not.have.been.calledWith({
-        tipo: TipoEvento.NUEVA_RESERVA,
-        payload: {
-            reservaId: this.datosReserva.reservaId,
-            fechaInicio: this.datosReserva.fechaInicio,
-            fechaFin: this.datosReserva.fechaFin
-        }
-    })
-})
-
-Then('se emite un evento de aceptacion de la reserva', async function () {
+Then('se emite un evento de creación de la reserva fallida', async function () {
     expect(this.last_response).to.have.status(200)
     expect(this.last_response).to.be.json
 
     await esperarA(function (contexto) {
-        return contexto.mockServicioCore.notificar.calledWith({
-            tipo: TipoEvento.RESERVA_ACEPTADA,
-            payload: {
-                reservaId: contexto.datosAprobacion.reservaId,
-                fechaInicio: contexto.datosAprobacion.fechaInicio,
-                fechaFin: contexto.datosAprobacion.fechaFin
-            }
+        return contexto.mockServicioCore.notificarCreacionDeReservaFallida.calledWithMatch({
+            id: contexto.datosReserva.reservaId
+        })
+    }, this)
+});
+
+Then('se emite un evento de aceptación de la reserva', async function () {
+    expect(this.last_response).to.have.status(200)
+    expect(this.last_response).to.be.json
+
+    await esperarA(function (contexto) {
+        return contexto.mockServicioCore.notificarReservaAprobada.calledWithMatch({
+            id: contexto.datosAprobacion.reservaId
         })
     }, this)
 })
@@ -107,13 +106,30 @@ Then('se emite un evento de rechazo de la reserva', async function () {
     expect(this.last_response).to.be.json
 
     await esperarA(function (contexto) {
-        return contexto.mockServicioCore.notificar.calledWith({
-            tipo: TipoEvento.RESERVA_RECHAZADA,
-            payload: {
-                reservaId: contexto.datosRechazo.reservaId,
-                fechaInicio: contexto.datosRechazo.fechaInicio,
-                fechaFin: contexto.datosRechazo.fechaFin
-            }
+        return contexto.mockServicioCore.notificarReservaRechazada.calledWithMatch({
+            id: contexto.datosReserva.reservaId
         })
     }, this)
 })
+
+Then('se emite un evento de aprobación de reserva fallida', async function () {
+    expect(this.last_response).to.have.status(200)
+    expect(this.last_response).to.be.json
+
+    await esperarA(function (contexto) {
+        return contexto.mockServicioCore.notificarAprobacionDeReservaFallida.calledWithMatch({
+            id: contexto.datosReserva.reservaId
+        })
+    }, this)
+})
+
+Then('se emite un evento de rechazo de reserva fallida', async function () {
+    expect(this.last_response).to.have.status(200)
+    expect(this.last_response).to.be.json
+
+    await esperarA(function (contexto) {
+        return contexto.mockServicioCore.notificarRechazoDeReservaFallida.calledWithMatch({
+            id: contexto.datosReserva.reservaId
+        })
+    }, this)
+});

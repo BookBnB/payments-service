@@ -1,15 +1,30 @@
 # language: es
 Característica:
-    Como anfitrion
-    Quiero poder aprobar una reserva
-    Para recibir el pago del huesped
+  Como anfitrión
+  Quiero poder aprobar una reserva
+  Para recibir el pago del huésped
 
-    Antecedentes:
-        Dado que el usuario '25906492-9efa-4fdb-af87-3a15986a63b2' tiene una billetera con 100 ethers
-        Y que el usuario '25906492-9efa-4fdb-af87-3a15986a63b2' tiene una publicacion con precio 1 eth
-        Y que el usuario '149d79bf-39e0-4acb-8ac5-aa3d3006e49a' tiene una billetera con 100 ethers
-        Y el usuario '149d79bf-39e0-4acb-8ac5-aa3d3006e49a' crea exitosamente una reserva del '2020-12-01' al '2020-12-10'
+  Antecedentes:
+    Dado que soy un usuario con email 'anfitrion@book.bnb' con una billetera con 100 ethers
+    Y que tengo una publicación con precio 1 eth
+    Y que el usuario con email 'huesped@book.bnb' tiene una billetera con 100 ethers
+    Y que el usuario con email 'huesped@book.bnb' crea exitosamente una reserva del '2020-12-01' al '2020-12-10'
 
-    Escenario: Aprobación exitosa
-        Cuando el anfitrion '25906492-9efa-4fdb-af87-3a15986a63b2' aprueba la reserva del usuario '149d79bf-39e0-4acb-8ac5-aa3d3006e49a'
-        Entonces se emite un evento de aceptacion de la reserva
+  Escenario: Aprobación exitosa
+    Cuando apruebo la reserva del usuario con email 'huesped@book.bnb'
+    Entonces se emite un evento de aceptación de la reserva
+
+  Escenario: Aprobación exitosa - Huésped sin fondos
+    Dado que al usuario con email 'huesped@book.bnb' le quedan 0 ethers en su billetera
+    Cuando apruebo la reserva del usuario con email 'huesped@book.bnb'
+    Entonces se emite un evento de aceptación de la reserva
+
+  Escenario: Aprobación fallida - Anfitrión sin fondos
+    Dado que me quedan 0 ethers en mi billetera
+    Cuando apruebo la reserva del usuario con email 'huesped@book.bnb'
+    Entonces se emite un evento de aprobación de reserva fallida
+
+  Escenario: Aprobación fallida - Anfitrión con fondos insuficientes
+    Dado que me quedan 0.0001 ethers en mi billetera
+    Cuando apruebo la reserva del usuario con email 'huesped@book.bnb'
+    Entonces se emite un evento de aprobación de reserva fallida

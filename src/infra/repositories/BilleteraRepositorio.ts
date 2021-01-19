@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import Billetera from "../../domain/billeteras/entidades/Billetera";
 import IBilleteraRepositorio from "../../domain/billeteras/repositorios/BilleteraRepositorio";
-import BilleteraInexistenteError from "../../domain/publicaciones/excepciones/BilleteraInexistenteError";
+import BilleteraInexistenteError from "../../domain/billeteras/excepciones/BilleteraInexistenteError";
 
 export class BilleteraRepositorio implements IBilleteraRepositorio {
     public constructor(
