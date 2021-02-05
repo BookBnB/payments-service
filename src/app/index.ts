@@ -5,6 +5,7 @@ import Api from "./Api";
 import Welcome from "./Welcome"
 import OpenApiSpec from "./OpenApiSpec";
 import {IContainer} from "../infra/container/Container";
+import PrometheusMiddleware from "./PrometheusMiddleware";
 
 export default async (container: IContainer): Promise<Application> => {
     const app = express();
@@ -23,6 +24,7 @@ export default async (container: IContainer): Promise<Application> => {
         }
     })
     new HTTPErrorHandlerLogger({app, logger})
+    new PrometheusMiddleware(app)
 
     return app
 }
