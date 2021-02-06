@@ -4,7 +4,7 @@ metadata:
   name: payments-config
 data:
   PORT: "80"
-  CORE_URL: "https://bookbnb-develop.herokuapp.com"
+  CORE_URL: "http://bookbnb-core-service"
   NODE_ENV: "development"
   NODE_URL: "https://ropsten.infura.io/v3/1a5486d53fd14919b27241024d6c448b"
   CONTRACT_ADDRESS: "0xae4D61a44ee5D89DF7d33baE700d5883AC5E91A0"
