@@ -4,7 +4,7 @@ env:
   REGISTRY_URL: ghcr.io
   REGISTRY_USERNAME: ${{ github.actor }}
   REGISTRY_PASSWORD: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
-  IMAGE_NAME: ghcr.io/${{ github.repository }}
+  IMAGE_NAME: ghcr.io/bookbnb/payments-service
   IMAGE_VERSION: ${{ github.sha }}
 jobs:
   build:
