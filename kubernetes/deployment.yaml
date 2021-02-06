@@ -21,6 +21,11 @@ spec:
         - name: payments-port
           containerPort: 80
           protocol: TCP
+        resources:
+          limits:
+            memory: "300Mi"
+          requests:
+            memory: "150Mi"
         envFrom:
           - secretRef:
               name: payments-secret
