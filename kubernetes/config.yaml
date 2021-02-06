@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payments-config
+data:
+  PORT: "80"
+  CORE_URL: "https://bookbnb-develop.herokuapp.com"
+  NODE_ENV: "development"
+  NODE_URL: "https://ropsten.infura.io/v3/1a5486d53fd14919b27241024d6c448b"
