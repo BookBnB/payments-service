@@ -5,6 +5,7 @@ import Api from "./Api";
 import Welcome from "./Welcome"
 import OpenApiSpec from "./OpenApiSpec";
 import {IContainer} from "../infra/container/Container";
+import { IMetricMonitor } from "./metrics/MetricMonitor";
 
 export default async (container: IContainer): Promise<Application> => {
     const app = express();
@@ -23,6 +24,9 @@ export default async (container: IContainer): Promise<Application> => {
         }
     })
     new HTTPErrorHandlerLogger({app, logger})
+
+    const monitor = container.get<IMetricMonitor>({ identifier: "IMetricMonitor" })
+    monitor.monitor(app)
 
     return app
 }

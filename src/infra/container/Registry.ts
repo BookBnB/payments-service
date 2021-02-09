@@ -23,6 +23,8 @@ import ServicioCore from "../servicios/ServicioCore";
 import typeOrmConnection from "../typeOrmConnection";
 import { IContainer } from "./Container";
 import Log4JSLogger, {ILogger} from "../logging/Logger";
+import { IMetricMonitor } from "../../app/metrics/MetricMonitor";
+import { PrometheusMonitor } from "../../app/metrics/PrometheusMonitor";
 
 export default class Registry {
     public async registrar(container: DIContainer): Promise<IContainer> {
@@ -35,6 +37,7 @@ export default class Registry {
         await this.registrarBilleteras(container);
         await this.registrarPublicaciones(container);
         await this.registrarReservas(container)
+        await this.registrarMetricas(container)
 
         return container;
     }
@@ -90,5 +93,9 @@ export default class Registry {
         container.registerSingleton<AprobarReserva>()
         container.registerSingleton<RechazarReserva>()
         container.registerSingleton<ReservaController>()
+    }
+
+    protected async registrarMetricas(container: DIContainer) {
+        container.registerSingleton<IMetricMonitor>(() => new PrometheusMonitor())
     }
 }
