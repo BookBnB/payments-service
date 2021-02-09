@@ -11,6 +11,7 @@ import { abi as BookBnBABI, bytecode as BookBnBBytecode } from "../src/contracts
 import ServicioCore from "../src/infra/servicios/ServicioCore";
 import TestRegistry from "./doubles/TestRegistry";
 import app from "../src/app"
+import MonitorFake from "./doubles/MonitorFake";
 
 
 dotenvExpand(dotenv.config({path: 'features/.env'}))
@@ -92,7 +93,10 @@ async function setupApp(context: World) {
     context.mockServicioCore = sinon.createStubInstance(ServicioCore)
 
     context.container = new DIContainer()
-    await new TestRegistry(context.mockServicioCore).registrar(context.container);
+    await new TestRegistry(
+        context.mockServicioCore,
+        new MonitorFake()
+    ).registrar(context.container);
     context.app = await app(context.container)
 }
 
