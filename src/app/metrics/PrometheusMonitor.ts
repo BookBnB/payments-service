@@ -5,7 +5,7 @@ import { IMetricMonitor } from "./MetricMonitor";
 export class PrometheusMonitor implements IMetricMonitor {
     public monitor(app: Application): void {
         app.use(apiMetrics({
-            metricsPath: process.env.PROM_METRICS_PATH || "/v1/metricas"
+            metricsPath: process.env.PROM_METRICS_PATH || "/metrics"
         }))
     }
 }
