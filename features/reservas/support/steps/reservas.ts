@@ -75,6 +75,21 @@ When('rechazo la reserva del usuario con email {string}', async function (huespe
     await Reservas.rechazar(this, this.datosRechazo)
 });
 
+When('el usuario con email {string} cancela su reserva del {string} al {string}', async function (huespedEmail, fechaInicio, fechaFin) {
+    const anfitrionId = this.usuarios.get(this.emailUsuarioActual)
+    const huespedId = this.usuarios.get(huespedEmail)
+    this.datosCancelacion = {
+        reservaId: this.datosReserva.reservaId,
+        publicacionContratoId: this.datosReserva.publicacionContratoId,
+        anfitrionId,
+        huespedId,
+        fechaInicio,
+        fechaFin
+    }
+
+    await Reservas.cancelar(this, this.datosCancelacion)
+});
+
 Then('se emite un evento de confirmación de la creación de la nueva reserva', async function () {
     await esperarEventoCreacionReserva.bind(this)()
 });
@@ -129,6 +144,28 @@ Then('se emite un evento de rechazo de reserva fallida', async function () {
 
     await esperarA(function (contexto) {
         return contexto.mockServicioCore.notificarRechazoDeReservaFallida.calledWithMatch({
+            id: contexto.datosReserva.reservaId
+        })
+    }, this)
+});
+
+Then('se emite un evento de cancelación de reserva', async function () {
+    expect(this.last_response).to.have.status(200)
+    expect(this.last_response).to.be.json
+
+    await esperarA(function (contexto) {
+        return contexto.mockServicioCore.notificarReservaCancelada.calledWithMatch({
+            id: contexto.datosCancelacion.reservaId
+        })
+    }, this)
+});
+
+Then('se emite un evento de cancelación de reserva fallida', async function () {
+    expect(this.last_response).to.have.status(200)
+    expect(this.last_response).to.be.json
+
+    await esperarA(function (contexto) {
+        return contexto.mockServicioCore.notificarCancelacionDeReservaFallida.calledWithMatch({
             id: contexto.datosReserva.reservaId
         })
     }, this)

@@ -12,4 +12,5 @@ export interface IContratoBookBnB {
     crearReserva(reserva: Reserva, billetera: Billetera): Promise<void>;
     aprobarReserva(reserva: Reserva, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<void>;
     rechazarReserva(reserva: Reserva, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<void>;
+    cancelarReserva(reserva: Reserva, billeteraHuesped: Billetera): Promise<void>;
 }

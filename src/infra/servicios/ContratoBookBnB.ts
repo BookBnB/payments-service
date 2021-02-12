@@ -100,6 +100,26 @@ export class ContratoBookBnB implements IContratoBookBnB {
         await ContratoBookBnB.ejecutar(tx, billeteraAnfitrion)
     }
 
+    async cancelarReserva(reserva: Reserva, billeteraHuesped: Billetera): Promise<void> {
+        const web3 = new Web3(
+            new HDWalletProvider(billeteraHuesped.palabras, process.env.NODE_URL)
+        )
+
+        const contract = new web3.eth.Contract(<any>ContractABI, process.env.CONTRACT_ADDRESS)
+
+        const tx = await contract.methods.cancelBatch(
+            reserva.contratoId,
+            reserva.getNocheInicio().getDate(),
+            reserva.getNocheInicio().getMonth() + 1,
+            reserva.getNocheInicio().getFullYear(),
+            reserva.getNocheFin().getDate(),
+            reserva.getNocheFin().getMonth() + 1,
+            reserva.getNocheFin().getFullYear()
+        )
+
+        await ContratoBookBnB.ejecutar(tx, billeteraHuesped)
+    }
+
     private static async ejecutar(tx: any, billetera: Billetera, value: BN = new BN(0)): Promise<TransactionReceipt> {
         try {
             return await tx.send({

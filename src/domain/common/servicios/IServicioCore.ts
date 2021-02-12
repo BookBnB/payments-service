@@ -10,4 +10,6 @@ export default interface IServicioCore {
     notificarAprobacionDeReservaFallida(reserva: Reserva): Promise<void>;
     notificarRechazoDeReservaFallida(reserva: Reserva): Promise<void>;
     notificarCreacionDeReservaFallida(reserva: Reserva): Promise<void>;
+    notificarReservaCancelada(reserva: Reserva): Promise<void>;
+    notificarCancelacionDeReservaFallida(reserva: Reserva): Promise<void>;
 }
