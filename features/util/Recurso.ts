@@ -31,4 +31,12 @@ export default class Recurso {
             .type("json")
             .send(data)
     }
+
+    protected static async delete(context: any, path: string, data: object) {
+        context.last_response = await chai.request(context.app)
+            .delete(`${this.baseUlr()}${path}`)
+            .set('authorization', context.tokenSesion || '')
+            .type("json")
+            .send(data)
+    }
 }

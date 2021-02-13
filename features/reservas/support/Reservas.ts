@@ -27,4 +27,8 @@ export default class Reservas extends Recurso {
     public static async rechazar(context: World, body: any) {
         await this.put(context, `/${body.reservaId}/rechazo`, body)
     }
+
+    public static async cancelar(context: World, body: any) {
+        await this.delete(context, `/${body.reservaId}`, body)
+    }
 }

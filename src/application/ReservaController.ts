@@ -1,4 +1,4 @@
-import {Body, JsonController, Post, Put} from "routing-controllers";
+import {Body, Delete, JsonController, Post, Put} from "routing-controllers";
 import {OpenAPI, ResponseSchema} from "routing-controllers-openapi";
 import {AprobarReserva} from "../domain/contrato/casos-uso/AprobarReserva";
 import {CrearReserva} from "../domain/contrato/casos-uso/CrearReserva";
@@ -7,6 +7,7 @@ import Result from "./common/Result";
 import Reserva from "../domain/contrato/entidades/Reserva";
 import {IsDate, IsNumber, IsString, IsUUID} from "class-validator";
 import {Type} from "class-transformer";
+import { CancelarReserva } from "../domain/contrato/casos-uso/CancelarReserva";
 
 class ReservaDTO {
     @IsString()
@@ -45,7 +46,8 @@ export class ReservaController {
     constructor(
         private readonly crearReserva: CrearReserva,
         private readonly aprobarReserva: AprobarReserva,
-        private readonly rechazarReserva: RechazarReserva
+        private readonly rechazarReserva: RechazarReserva,
+        private readonly cancelarReserva: CancelarReserva
     ) {
     }
 
@@ -72,6 +74,15 @@ export class ReservaController {
     @OpenAPI({summary: 'Rechaza un intento de reserva para una publicación'})
     async rechazar(@Body() body: OperarConReservaDTO): Promise<Result> {
         await this.rechazarReserva.execute(body.anfitrionId, body.huespedId, body.reserva())
+
+        return Result.success()
+    }
+
+    @Delete('/:id')
+    @ResponseSchema(Result)
+    @OpenAPI({summary: 'Cancela un intento de reserva para una publicación'})
+    async cancelar(@Body() body: OperarConReservaDTO): Promise<Result> {
+        await this.cancelarReserva.execute(body.huespedId, body.reserva())
 
         return Result.success()
     }
