@@ -78,7 +78,7 @@ export class ReservaController {
         return Result.success()
     }
 
-    @Delete('/:id')
+    @Put('/:id/cancelacion')
     @ResponseSchema(Result)
     @OpenAPI({summary: 'Cancela un intento de reserva para una publicación'})
     async cancelar(@Body() body: OperarConReservaDTO): Promise<Result> {
