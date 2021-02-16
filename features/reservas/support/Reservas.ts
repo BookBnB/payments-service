@@ -29,6 +29,6 @@ export default class Reservas extends Recurso {
     }
 
     public static async cancelar(context: World, body: any) {
-        await this.delete(context, `/${body.reservaId}`, body)
+        await this.put(context, `/${body.reservaId}/cancelacion`, body)
     }
 }
