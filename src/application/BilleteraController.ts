@@ -1,7 +1,9 @@
-import {Body, HttpCode, HttpError, JsonController, Post} from "routing-controllers";
+import {Body, Get, HttpCode, HttpError, JsonController, NotFoundError, Params, Post} from "routing-controllers";
 import {OpenAPI, ResponseSchema} from "routing-controllers-openapi";
 import {CrearBilletera} from "../domain/billeteras/casos-uso/CrearBilletera";
+import { VerBilletera } from "../domain/billeteras/casos-uso/VerBilletera";
 import BilleteraDTO from "../domain/billeteras/dtos/BilleteraDTO";
+import BilleteraInexistenteError from "../domain/billeteras/excepciones/BilleteraInexistenteError";
 import BilleteraYaExisteError from "../domain/billeteras/excepciones/BilleteraYaExisteError";
 import UUID from "../domain/common/entidades/UUID";
 
@@ -9,7 +11,8 @@ import UUID from "../domain/common/entidades/UUID";
 @JsonController('/billeteras')
 export class BilleteraController {
     constructor(
-        private readonly crearBilletera: CrearBilletera
+        private readonly crearBilletera: CrearBilletera,
+        private readonly verBilletera: VerBilletera
     ) {
     }
 
@@ -23,6 +26,21 @@ export class BilleteraController {
         } catch (e) {
             if (e instanceof BilleteraYaExisteError) {
                 throw new HttpError(409, e.message);
+            }
+
+            throw e
+        }
+    }
+
+    @Get('/:id')
+    @ResponseSchema(BilleteraDTO)
+    @OpenAPI({summary: 'Visualiza la billetera de un usuario'})
+    async ver(@Params() {id}: UUID): Promise<BilleteraDTO> {
+        try {
+            return await this.verBilletera.execute(id)
+        } catch(e) {
+            if (e instanceof BilleteraInexistenteError) {
+                throw new NotFoundError(e.message)
             }
 
             throw e

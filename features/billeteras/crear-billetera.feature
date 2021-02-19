@@ -7,7 +7,7 @@ Característica:
   Escenario: Creación Exitosa
     Dado que no existen billeteras
     Cuando creo una billetera para el usuario de id '25906492-9efa-4fdb-af87-3a15986a63b2'
-    Entonces veo una billetera a nombre de dicho usuario
+    Entonces veo una nueva billetera a nombre de dicho usuario
 
   Escenario: Creación fallida - Id inválido
     Dado que no existen billeteras

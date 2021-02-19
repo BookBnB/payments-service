@@ -30,6 +30,7 @@ import TransaccionReserva from "../../domain/reservas/entidades/TransaccionReser
 import ITransaccionReservaRepositorio from "../../domain/reservas/repositorios/TransaccionReservaRepositorio";
 import { TransaccionReservaRepositorio } from "../repositories/TransaccionReservaRepositorio";
 import { ListarTransaccionesReserva } from "../../domain/reservas/casos-uso/ListarTransaccionesReserva";
+import { VerBilletera } from "../../domain/billeteras/casos-uso/VerBilletera";
 
 export default class Registry {
     public async registrar(container: DIContainer): Promise<IContainer> {
@@ -76,6 +77,7 @@ export default class Registry {
 
     protected async registrarBilleteras(container: DIContainer) {
         container.registerTransient<CrearBilletera>();
+        container.registerTransient<VerBilletera>();
         container.registerSingleton<BilleteraController>();
 
         const repoBilleteras = await container.get<Connection>().getRepository(Billetera);
