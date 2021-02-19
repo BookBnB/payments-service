@@ -1,4 +1,4 @@
-import {Body, Delete, JsonController, Post, Put} from "routing-controllers";
+import {Body, Delete, Get, JsonController, Params, Post, Put} from "routing-controllers";
 import {OpenAPI, ResponseSchema} from "routing-controllers-openapi";
 import {AprobarReserva} from "../domain/contrato/casos-uso/AprobarReserva";
 import {CrearReserva} from "../domain/contrato/casos-uso/CrearReserva";
@@ -8,6 +8,8 @@ import Reserva from "../domain/contrato/entidades/Reserva";
 import {IsDate, IsNumber, IsString, IsUUID} from "class-validator";
 import {Type} from "class-transformer";
 import { CancelarReserva } from "../domain/contrato/casos-uso/CancelarReserva";
+import TransaccionReserva from "../domain/reservas/entidades/TransaccionReserva";
+import { ListarTransaccionesReserva } from "../domain/reservas/casos-uso/ListarTransaccionesReserva";
 
 class ReservaDTO {
     @IsString()
@@ -47,7 +49,8 @@ export class ReservaController {
         private readonly crearReserva: CrearReserva,
         private readonly aprobarReserva: AprobarReserva,
         private readonly rechazarReserva: RechazarReserva,
-        private readonly cancelarReserva: CancelarReserva
+        private readonly cancelarReserva: CancelarReserva,
+        private readonly listarTransaccionesReserva: ListarTransaccionesReserva
     ) {
     }
 
@@ -85,5 +88,12 @@ export class ReservaController {
         await this.cancelarReserva.execute(body.huespedId, body.reserva())
 
         return Result.success()
+    }
+
+    @Get('/:id/transacciones')
+    @ResponseSchema(TransaccionReserva, {isArray: true})
+    @OpenAPI({summary: 'Muestra una lista de transacciones para una reserva'})
+    async listarTransacciones(@Params() {id}: any): Promise<TransaccionReserva[]> {
+        return this.listarTransaccionesReserva.execute(id)
     }
 }

@@ -3,12 +3,15 @@ import IServicioCore from "../../common/servicios/IServicioCore";
 import {IContratoBookBnB} from "../servicios/ContratoBookBnB";
 import {UseCase} from "../../UseCase";
 import Reserva from "../entidades/Reserva";
+import { EventoReserva } from "../../reservas/entidades/TransaccionReserva";
+import ITransaccionReservaRepositorio from "../../reservas/repositorios/TransaccionReservaRepositorio";
 
 export class AprobarReserva implements UseCase {
     constructor(
         private readonly billeteras: IBilleteraRepositorio,
         private readonly contrato: IContratoBookBnB,
-        private readonly servicioCore: IServicioCore
+        private readonly servicioCore: IServicioCore,
+        private readonly transaccionesReservas: ITransaccionReservaRepositorio
     ) {
     }
 
@@ -17,11 +20,27 @@ export class AprobarReserva implements UseCase {
         const billeteraHuesped = await this.billeteras.obtener(huespedId)
 
         this.contrato.aprobarReserva(reserva, billeteraAnfitrion, billeteraHuesped)
-            .then(() => {
+            .then((receipt) => {
                 this.servicioCore.notificarReservaAprobada(reserva)
+                return {
+                    hash: receipt.transactionHash,
+                    exito: receipt.status
+                }
             })
             .catch(() => {
                 this.servicioCore.notificarAprobacionDeReservaFallida(reserva)
+                return {
+                    exito: false
+                }
+            })
+            .then(({ hash, exito }: any) => {
+                this.transaccionesReservas.guardar({
+                    hash,
+                    evento: EventoReserva.APROBACION,
+                    reservaId: reserva.id,
+                    emisor: billeteraAnfitrion,
+                    exito
+                })
             })
     }
 }

@@ -104,6 +104,7 @@ function setupWorldState(context: World) {
     context.billeteras = {}
     context.publicaciones = {}
     context.usuarios = new Map()
+    context.reservas = new Map()
 }
 
 async function closeContainer(context: World) {

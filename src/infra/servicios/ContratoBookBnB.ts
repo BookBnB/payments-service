@@ -1,10 +1,9 @@
 import HDWalletProvider from "@truffle/hdwallet-provider";
 import Web3 from "web3";
-import { TransactionReceipt } from 'web3-eth';
 import { abi as ContractABI } from "../../contracts/BnBooking.json";
 import Billetera from "../../domain/billeteras/entidades/Billetera";
 import TransaccionRevertidaError from "../../domain/common/excepciones/TransaccionRevertidaError";
-import {IContratoBookBnB} from "../../domain/contrato/servicios/ContratoBookBnB";
+import {IContratoBookBnB, TransactionReceipt} from "../../domain/contrato/servicios/ContratoBookBnB";
 import Reserva from "../../domain/contrato/entidades/Reserva";
 import BN from "bn.js"
 import Publicacion from "../../domain/contrato/entidades/Publicacion";
@@ -16,7 +15,7 @@ interface Room {
 }
 
 export class ContratoBookBnB implements IContratoBookBnB {
-    async crearPublicacion(publicacion: Publicacion, billetera: Billetera): Promise<void> {
+    async crearPublicacion(publicacion: Publicacion, billetera: Billetera): Promise<TransactionReceipt> {
         const web3 = new Web3(
             new HDWalletProvider(billetera.palabras, process.env.NODE_URL)
         )
@@ -32,9 +31,11 @@ export class ContratoBookBnB implements IContratoBookBnB {
         const evento = receipt.events!.RoomCreated;
 
         publicacion.setContratoId(parseInt(evento.returnValues.roomId))
+
+        return receipt
     }
 
-    async crearReserva(reserva: Reserva, billetera: Billetera): Promise<void> {
+    async crearReserva(reserva: Reserva, billetera: Billetera): Promise<TransactionReceipt> {
         const web3 = new Web3(
             new HDWalletProvider(billetera.palabras, process.env.NODE_URL)
         )
@@ -55,10 +56,10 @@ export class ContratoBookBnB implements IContratoBookBnB {
 
         const precioTotal = new BN(room.price).mul(new BN(reserva.dias()))
 
-        await ContratoBookBnB.ejecutar(tx, billetera, precioTotal);
+        return await ContratoBookBnB.ejecutar(tx, billetera, precioTotal);
     }
 
-    async aprobarReserva(reserva: Reserva, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<void> {
+    async aprobarReserva(reserva: Reserva, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<TransactionReceipt> {
         const web3 = new Web3(
             new HDWalletProvider(billeteraAnfitrion.palabras, process.env.NODE_URL)
         )
@@ -76,10 +77,10 @@ export class ContratoBookBnB implements IContratoBookBnB {
             reserva.getNocheFin().getFullYear()
         )
 
-        await ContratoBookBnB.ejecutar(tx, billeteraAnfitrion)
+        return await ContratoBookBnB.ejecutar(tx, billeteraAnfitrion)
     }
 
-    async rechazarReserva(reserva: Reserva, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<void> {
+    async rechazarReserva(reserva: Reserva, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<TransactionReceipt> {
         const web3 = new Web3(
             new HDWalletProvider(billeteraAnfitrion.palabras, process.env.NODE_URL)
         )
@@ -97,10 +98,10 @@ export class ContratoBookBnB implements IContratoBookBnB {
             reserva.getNocheFin().getFullYear()
         )
 
-        await ContratoBookBnB.ejecutar(tx, billeteraAnfitrion)
+        return await ContratoBookBnB.ejecutar(tx, billeteraAnfitrion)
     }
 
-    async cancelarReserva(reserva: Reserva, billeteraHuesped: Billetera): Promise<void> {
+    async cancelarReserva(reserva: Reserva, billeteraHuesped: Billetera): Promise<TransactionReceipt> {
         const web3 = new Web3(
             new HDWalletProvider(billeteraHuesped.palabras, process.env.NODE_URL)
         )
@@ -117,7 +118,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
             reserva.getNocheFin().getFullYear()
         )
 
-        await ContratoBookBnB.ejecutar(tx, billeteraHuesped)
+        return await ContratoBookBnB.ejecutar(tx, billeteraHuesped)
     }
 
     private static async ejecutar(tx: any, billetera: Billetera, value: BN = new BN(0)): Promise<TransactionReceipt> {
