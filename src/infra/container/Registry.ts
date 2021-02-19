@@ -26,6 +26,10 @@ import Log4JSLogger, {ILogger} from "../logging/Logger";
 import { IMetricMonitor } from "../../app/metrics/MetricMonitor";
 import { PrometheusMonitor } from "../../app/metrics/PrometheusMonitor";
 import { CancelarReserva } from "../../domain/contrato/casos-uso/CancelarReserva";
+import TransaccionReserva from "../../domain/reservas/entidades/TransaccionReserva";
+import ITransaccionReservaRepositorio from "../../domain/reservas/repositorios/TransaccionReservaRepositorio";
+import { TransaccionReservaRepositorio } from "../repositories/TransaccionReservaRepositorio";
+import { ListarTransaccionesReserva } from "../../domain/reservas/casos-uso/ListarTransaccionesReserva";
 
 export default class Registry {
     public async registrar(container: DIContainer): Promise<IContainer> {
@@ -90,11 +94,17 @@ export default class Registry {
     }
 
     protected async registrarReservas(container: DIContainer) {
-        container.registerSingleton<CrearReserva>()
-        container.registerSingleton<AprobarReserva>()
-        container.registerSingleton<RechazarReserva>()
-        container.registerSingleton<CancelarReserva>()
-        container.registerSingleton<ReservaController>()
+        container.registerTransient<CrearReserva>()
+        container.registerTransient<AprobarReserva>()
+        container.registerTransient<RechazarReserva>()
+        container.registerTransient<CancelarReserva>()
+        container.registerTransient<ReservaController>()
+
+        const repoTransaccionesReserva = await container.get<Connection>().getRepository(TransaccionReserva)
+        container.registerSingleton<Repository<TransaccionReserva>>(() => repoTransaccionesReserva)
+        container.registerSingleton<ITransaccionReservaRepositorio>(() => 
+            new TransaccionReservaRepositorio(container.get<Repository<TransaccionReserva>>()))
+        container.registerTransient<ListarTransaccionesReserva>()
     }
 
     protected async registrarMetricas(container: DIContainer) {
