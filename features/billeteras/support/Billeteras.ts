@@ -14,4 +14,8 @@ export default class Billeteras extends Recurso {
     public static async listar(context: any) {
         await this.get(context, `/`)
     }
+
+    public static async ver(context: any, usuarioId: any) {
+        await this.get(context, `/${usuarioId}`)
+    }
 }

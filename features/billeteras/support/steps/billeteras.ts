@@ -110,12 +110,28 @@ When('listo las billeteras', async function () {
     await Billeteras.listar(this);
 });
 
-Then('veo una billetera a nombre de dicho usuario', function () {
-    expect(this.last_response).to.have.status(201)
+When('ingreso a la billetera del usuario con id {string}', async function (id) {
+    await Billeteras.ver(this, id)
+});
+
+function validarBilletera(this: any) {
     expect(this.last_response).to.be.json
+
+    expect(this.last_response.body).to.have.property('usuarioId')
+    expect(this.last_response.body).to.not.have.property('palabras')
 
     const address: string = this.last_response.body.direccion;
     expect(Web3.utils.isAddress(address)).to.be.true;
+}
+
+Then('veo una nueva billetera a nombre de dicho usuario', function () {
+    expect(this.last_response).to.have.status(201)
+    validarBilletera.bind(this)()
+});
+
+Then('veo una billetera a nombre de dicho usuario', function () {
+    expect(this.last_response).to.have.status(200)
+    validarBilletera.bind(this)()
 });
 
 Then('veo las billeteras de los usuarios:', function (dataTable: TableDefinition) {
@@ -135,6 +151,12 @@ Then('obtengo un error indicando que ya existe', function () {
     expect(this.last_response).to.be.json
     expect(this.last_response).to.have.status(409)
     expect(this.last_response.body).to.have.property('message').to.be.equal('Billetera ya existe')
+});
+
+Then('obtengo un error indicando que no existe', function () {
+    expect(this.last_response).to.be.json
+    expect(this.last_response).to.have.status(404)
+    expect(this.last_response.body).to.have.property('message').to.match(/La billetera del usuario [a-zA-Z0-9-]{36} no existe/)
 });
 
 Then('veo un error indicado en el campo {string}', function (campoError: string) {

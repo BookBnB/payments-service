@@ -27,6 +27,7 @@ before_script:
   - docker pull trufflesuite/ganache-cli:latest
   - export NODE_URL='http://localhost:8545'
   - docker run --detach --publish 8545:8545 trufflesuite/ganache-cli:latest -e 10000 -a 1 -s asecretseed
+  - sleep 3
 
 script:
   - npm run test:coverage
