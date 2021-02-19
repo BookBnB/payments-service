@@ -13,10 +13,11 @@ export class TransaccionReservaRepositorio implements ITransaccionReservaReposit
     }
 
     obtener(reservaId: string): Promise<TransaccionReserva[]> {
-        return this.repo.createQueryBuilder('transaccion')
+        return this.repo.createQueryBuilder('tx')
+            .innerJoin('tx.emisor', 'billetera')
+            .select(['tx', 'billetera.usuarioId', 'billetera.direccion'])
+            .where('tx.reservaId = :reservaId', { reservaId })
             .orderBy('fecha')
-            .where('transaccion.reservaId = :reservaId', { reservaId })
-            .leftJoinAndSelect("transaccion.emisor", "billeteras")
             .getMany()
     }
 }

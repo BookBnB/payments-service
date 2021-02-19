@@ -94,6 +94,6 @@ export class ReservaController {
     @ResponseSchema(TransaccionReserva, {isArray: true})
     @OpenAPI({summary: 'Muestra una lista de transacciones para una reserva'})
     async listarTransacciones(@Params() {id}: any): Promise<TransaccionReserva[]> {
-        return this.listarTransaccionesReserva.execute(id)
+        return await this.listarTransaccionesReserva.execute(id)
     }
 }

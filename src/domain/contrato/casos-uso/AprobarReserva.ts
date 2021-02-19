@@ -19,7 +19,7 @@ export class AprobarReserva implements UseCase {
         const billeteraAnfitrion = await this.billeteras.obtener(anfitrionId)
         const billeteraHuesped = await this.billeteras.obtener(huespedId)
 
-        this.contrato.aprobarReserva(reserva, billeteraAnfitrion, billeteraHuesped)
+        return this.contrato.aprobarReserva(reserva, billeteraAnfitrion, billeteraHuesped)
             .then((receipt) => {
                 this.servicioCore.notificarReservaAprobada(reserva)
                 return {

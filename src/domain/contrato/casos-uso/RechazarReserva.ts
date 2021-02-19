@@ -19,7 +19,7 @@ export class RechazarReserva implements UseCase {
         const billeteraAnfitrion = await this.billeteras.obtener(anfitrionId)
         const billeteraHuesped = await this.billeteras.obtener(huespedId)
 
-        this.contrato.rechazarReserva(reserva, billeteraAnfitrion, billeteraHuesped)
+        return this.contrato.rechazarReserva(reserva, billeteraAnfitrion, billeteraHuesped)
             .then((receipt) => {
                 this.servicioCore.notificarReservaRechazada(reserva)
                 return {

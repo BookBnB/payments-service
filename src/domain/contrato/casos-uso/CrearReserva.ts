@@ -18,7 +18,7 @@ export class CrearReserva implements UseCase {
     async execute(huespedId: string, reserva: Reserva): Promise<void> {
         const billetera = await this.billeteras.obtener(huespedId)
 
-        this.contrato.crearReserva(reserva, billetera)
+        return this.contrato.crearReserva(reserva, billetera)
             .then((receipt) => {
                 this.servicioCore.notificarReservaCreada(reserva)
                 return {

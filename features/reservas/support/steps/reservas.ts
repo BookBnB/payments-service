@@ -124,6 +124,14 @@ When(/^(?:que )creo una reserva del '([^']*)' al '([^']*)'$/, async function (fe
     })
 });
 
+When('creo una reserva del {string} al {string}', async function (fechaInicio, fechaFin) {
+    await crearReserva.bind(this)({
+        usuarioId: this.usuarios.get(this.emailUsuarioActual),
+        fechaInicio,
+        fechaFin
+    })
+});
+
 Given('que el usuario con email {string} crea una reserva del {string} al {string}', async function (email, fechaInicio, fechaFin) {
     await crearReserva.bind(this)({
         usuarioId: this.usuarios.get(email),
