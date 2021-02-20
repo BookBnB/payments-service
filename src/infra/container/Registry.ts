@@ -31,6 +31,13 @@ import ITransaccionReservaRepositorio from "../../domain/reservas/repositorios/T
 import { TransaccionReservaRepositorio } from "../repositories/TransaccionReservaRepositorio";
 import { ListarTransaccionesReserva } from "../../domain/reservas/casos-uso/ListarTransaccionesReserva";
 import { VerBilletera } from "../../domain/billeteras/casos-uso/VerBilletera";
+import {CrearServidor} from "../../domain/servidores/casos-uso/CrearServidor";
+import {ServidorController} from "../../application/ServidorController";
+import Servidor from "../../domain/servidores/entidades/Servidor";
+import IServidorRepositorio from "../../domain/servidores/repositorios/ServidorRepositorio";
+import {ServidorRepositorio} from "../repositories/ServidorRepositorio";
+import IGeneradorToken from "../../domain/servidores/servicios/GeneradorToken";
+import {GeneradorToken} from "../servicios/GeneradorToken";
 
 export default class Registry {
     public async registrar(container: DIContainer): Promise<IContainer> {
@@ -43,6 +50,7 @@ export default class Registry {
         await this.registrarBilleteras(container);
         await this.registrarPublicaciones(container);
         await this.registrarReservas(container)
+        await this.registrarServidores(container)
         await this.registrarMetricas(container)
 
         return container;
@@ -107,6 +115,18 @@ export default class Registry {
         container.registerSingleton<ITransaccionReservaRepositorio>(() => 
             new TransaccionReservaRepositorio(container.get<Repository<TransaccionReserva>>()))
         container.registerTransient<ListarTransaccionesReserva>()
+    }
+
+    protected async registrarServidores(container: DIContainer) {
+        container.registerTransient<CrearServidor>()
+        container.registerSingleton<ServidorController>()
+
+        const repoServidores = await container.get<Connection>().getRepository(Servidor);
+        container.registerSingleton<Repository<Servidor>>(() => repoServidores);
+        container.registerSingleton<IServidorRepositorio>(() =>
+            new ServidorRepositorio(container.get<Repository<Servidor>>()));
+
+        container.registerSingleton<IGeneradorToken>(() => new GeneradorToken())
     }
 
     protected async registrarMetricas(container: DIContainer) {

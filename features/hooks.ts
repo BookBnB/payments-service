@@ -10,7 +10,7 @@ import logConfig from "../config/log-config.json";
 import { abi as BookBnBABI, bytecode as BookBnBBytecode } from "../src/contracts/BnBooking.json";
 import ServicioCore from "../src/infra/servicios/ServicioCore";
 import TestRegistry from "./doubles/TestRegistry";
-import app from "../src/app"
+import app from "../src/app/index"
 import MonitorFake from "./doubles/MonitorFake";
 
 

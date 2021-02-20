@@ -33,7 +33,7 @@ export class CrearReserva implements UseCase {
                 }
             })
             .then(({hash, exito}: any) => {
-                this.transaccionesReservas.guardar({
+                return this.transaccionesReservas.guardar({
                     hash,
                     evento: EventoReserva.CREACION,
                     reservaId: reserva.id,

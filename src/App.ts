@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import { configure } from "log4js";
-import app from './app';
+import app from './app/index';
 import { ILogger } from "./infra/logging/Logger";
 import logConfig from '../config/log-config.json';
 import Registry from "./infra/container/Registry";

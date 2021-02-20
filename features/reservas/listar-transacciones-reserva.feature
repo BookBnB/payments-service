@@ -17,8 +17,8 @@ Característica:
     Dado que el usuario con email 'huesped@book.bnb' crea exitosamente una reserva del '2020-12-01' al '2020-12-10'
     Cuando listo las transacciones de la reserva de 'huesped@book.bnb'
     Entonces obtengo un listado con:
-    | evento   | exito |
-    | creacion | true  |
+      | evento   | exito |
+      | creacion | true  |
 
   Escenario: Listado de transacciones para reserva creada sin éxito
     Dado que al usuario con email 'huesped@book.bnb' le quedan 0 ethers en su billetera
@@ -26,26 +26,26 @@ Característica:
     Y se emite un evento de creación de la reserva fallida
     Cuando listo las transacciones de la reserva de 'huesped@book.bnb'
     Entonces obtengo un listado con:
-    | evento   | exito |
-    | creacion | false |
+      | evento   | exito |
+      | creacion | false |
 
   Escenario: Listado de transacciones para reserva aprobada
     Dado que el usuario con email 'huesped@book.bnb' crea exitosamente una reserva del '2020-12-01' al '2020-12-10'
     Y se aprueba con éxito la reserva del usuario con email 'huesped@book.bnb'
     Cuando listo las transacciones de la reserva de 'huesped@book.bnb'
     Entonces obtengo un listado con:
-    | evento     | exito |
-    | creacion   | true  |
-    | aprobacion | true  |
+      | evento     | exito |
+      | creacion   | true  |
+      | aprobacion | true  |
 
   Escenario: Listado de transacciones para reserva rechazada
     Dado que el usuario con email 'huesped@book.bnb' crea exitosamente una reserva del '2020-12-01' al '2020-12-10'
     Y se rechaza con éxito la reserva del usuario con email 'huesped@book.bnb'
     Cuando listo las transacciones de la reserva de 'huesped@book.bnb'
     Entonces obtengo un listado con:
-    | evento   | exito |
-    | creacion | true  |
-    | rechazo  | true  |
+      | evento   | exito |
+      | creacion | true  |
+      | rechazo  | true  |
 
   Escenario: Listado de transacciones para reserva creada sin éxito por alcanzarse el cupo
     Dado que soy un usuario con email 'huesped_sin_cupo@book.bnb' con una billetera con 100 ethers
@@ -63,8 +63,8 @@ Característica:
     Y se emite un evento de creación de la reserva fallida
     Cuando listo las transacciones de la reserva de 'huesped_sin_cupo@book.bnb'
     Entonces obtengo un listado con:
-    | evento   | exito |
-    | creacion | false |
+      | evento   | exito |
+      | creacion | false |
 
   Escenario: Listado de transacciones para reserva creada y aprobada con éxito entre varias otras
     Dado que el usuario con email 'huesped@book.bnb' tiene una billetera con 100 ethers
@@ -80,9 +80,9 @@ Característica:
     Y se aprueba con éxito la reserva del usuario con email 'huesped@book.bnb'
     Cuando listo las transacciones de la reserva de 'huesped@book.bnb'
     Entonces obtengo un listado con:
-    | evento     | exito |
-    | creacion   | true  |
-    | aprobacion | true  |
+      | evento     | exito |
+      | creacion   | true  |
+      | aprobacion | true  |
 
   Escenario: Listado de transacciones para reserva creada y aprobada cuando ya se aprobó otra
     Dado que el usuario con email 'huesped@book.bnb' tiene una billetera con 100 ethers
@@ -93,9 +93,9 @@ Característica:
     Y se aprueba sin éxito la reserva del usuario con email 'huesped1@book.bnb'
     Cuando listo las transacciones de la reserva de 'huesped1@book.bnb'
     Entonces obtengo un listado con:
-    | evento     | exito |
-    | creacion   | true  |
-    | aprobacion | false  |
+      | evento     | exito |
+      | creacion   | true  |
+      | aprobacion | false |
 
   Escenario: Listado de transacciones para reserva creada y rechazada cuando ya se aprobó otra
     Dado que el usuario con email 'huesped@book.bnb' tiene una billetera con 100 ethers
@@ -106,6 +106,6 @@ Característica:
     Y se rechaza sin éxito la reserva del usuario con email 'huesped1@book.bnb'
     Cuando listo las transacciones de la reserva de 'huesped1@book.bnb'
     Entonces obtengo un listado con:
-    | evento   | exito |
-    | creacion | true  |
-    | rechazo  | false  |
+      | evento   | exito |
+      | creacion | true  |
+      | rechazo  | false |
