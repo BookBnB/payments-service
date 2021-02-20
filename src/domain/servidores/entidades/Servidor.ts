@@ -7,7 +7,7 @@ export interface ServidorConstructor {
 
 @Entity()
 export default class Servidor {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     public id?: string;
     
     @Column('text')
