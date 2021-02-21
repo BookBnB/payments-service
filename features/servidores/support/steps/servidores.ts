@@ -1,5 +1,5 @@
 import chai from "chai";
-import { Given, Then, When} from 'cucumber';
+import {Given, TableDefinition, Then, When} from 'cucumber';
 import sinonChai from "sinon-chai";
 import Servidores from "../Servidores";
 
