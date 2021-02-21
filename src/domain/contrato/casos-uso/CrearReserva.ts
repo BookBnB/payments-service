@@ -5,13 +5,15 @@ import { UseCase } from "../../UseCase";
 import Reserva from "../entidades/Reserva";
 import ITransaccionReservaRepositorio from "../../reservas/repositorios/TransaccionReservaRepositorio";
 import { EventoReserva } from "../../reservas/entidades/TransaccionReserva";
+import { ILogger } from "../../../infra/logging/Logger";
 
 export class CrearReserva implements UseCase {
     constructor(
         private readonly billeteras: IBilleteraRepositorio,
         private readonly contrato: IContratoBookBnB,
         private readonly servicioCore: IServicioCore,
-        private readonly transaccionesReservas: ITransaccionReservaRepositorio
+        private readonly transaccionesReservas: ITransaccionReservaRepositorio,
+        private readonly logger: ILogger
     ) {
     }
 
@@ -26,7 +28,8 @@ export class CrearReserva implements UseCase {
                     exito: receipt.status
                 }
             })
-            .catch(() => {
+            .catch((err) => {
+                this.logger.error('Falla al crear reserva:', err)
                 this.servicioCore.notificarCreacionDeReservaFallida(reserva)
                 return {
                     exito: false

@@ -3,12 +3,14 @@ import IServicioCore from "../../common/servicios/IServicioCore";
 import {IContratoBookBnB} from "../servicios/ContratoBookBnB";
 import {UseCase} from "../../UseCase";
 import Publicacion from "../entidades/Publicacion";
+import { ILogger } from "../../../infra/logging/Logger";
 
 export class CrearPublicacion implements UseCase {
     constructor(
         private readonly billeteras: IBilleteraRepositorio,
         private readonly contrato: IContratoBookBnB,
-        private readonly servicioCore: IServicioCore
+        private readonly servicioCore: IServicioCore,
+        private readonly logger: ILogger
     ) {
     }
 
@@ -19,7 +21,8 @@ export class CrearPublicacion implements UseCase {
             .then(() => {
                 this.servicioCore.notificarPublicacionCreada(publicacion)
             })
-            .catch(() => {
+            .catch((err) => {
+                this.logger.error('Falla al crear publicacion:', err)
                 this.servicioCore.notificarCreacionDePublicacionFallida(publicacion)
             })
     }
