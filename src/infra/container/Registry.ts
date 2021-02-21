@@ -38,6 +38,7 @@ import IServidorRepositorio from "../../domain/servidores/repositorios/ServidorR
 import {ServidorRepositorio} from "../repositories/ServidorRepositorio";
 import IGeneradorToken from "../../domain/servidores/servicios/GeneradorToken";
 import {GeneradorToken} from "../servicios/GeneradorToken";
+import {ListarServidores} from "../../domain/servidores/casos-uso/ListarServidores";
 
 export default class Registry {
     public async registrar(container: DIContainer): Promise<IContainer> {
@@ -119,6 +120,7 @@ export default class Registry {
 
     protected async registrarServidores(container: DIContainer) {
         container.registerTransient<CrearServidor>()
+        container.registerTransient<ListarServidores>()
         container.registerSingleton<ServidorController>()
 
         const repoServidores = await container.get<Connection>().getRepository(Servidor);

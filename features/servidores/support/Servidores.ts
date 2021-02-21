@@ -12,4 +12,8 @@ export default class Servidores extends Recurso {
             nombre,
         })
     }
+
+    static async listar(context: any) {
+        await this.get(context, '/')
+    }
 }

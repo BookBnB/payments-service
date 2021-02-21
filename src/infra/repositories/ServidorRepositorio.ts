@@ -11,4 +11,8 @@ export class ServidorRepositorio implements IServidorRepositorio {
     guardar(servidor: Servidor): Promise<Servidor> {
         return this.repo.save(servidor);
     }
+
+    listar(): Promise<Servidor[]> {
+        return this.repo.find();
+    }
 }
