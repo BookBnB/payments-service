@@ -1,5 +1,5 @@
 import { DIContainer } from "@wessberg/di";
-import { After, Before, BeforeAll, World } from "cucumber";
+import { After, Before, BeforeAll, setDefaultTimeout, World } from "cucumber";
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
 import { configure } from "log4js";
@@ -13,6 +13,8 @@ import TestRegistry from "./doubles/TestRegistry";
 import app from "../src/app/index"
 import MonitorFake from "./doubles/MonitorFake";
 
+
+setDefaultTimeout(60 * 1000);
 
 dotenvExpand(dotenv.config({path: 'features/.env'}))
 

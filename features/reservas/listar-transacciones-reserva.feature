@@ -103,9 +103,9 @@ Característica:
     Y que el usuario con email 'huesped@book.bnb' crea exitosamente una reserva del '2020-12-01' al '2020-12-10'
     Y que el usuario con email 'huesped1@book.bnb' crea exitosamente una reserva del '2020-12-01' al '2020-12-10'
     Y se aprueba con éxito la reserva del usuario con email 'huesped@book.bnb'
-    Y se rechaza sin éxito la reserva del usuario con email 'huesped1@book.bnb'
+    Y se rechaza con éxito la reserva del usuario con email 'huesped1@book.bnb'
     Cuando listo las transacciones de la reserva de 'huesped1@book.bnb'
     Entonces obtengo un listado con:
       | evento   | exito |
       | creacion | true  |
-      | rechazo  | false |
+      | rechazo  | true  |
