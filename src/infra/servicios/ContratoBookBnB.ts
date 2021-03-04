@@ -7,6 +7,7 @@ import {IContratoBookBnB, TransactionReceipt} from "../../domain/contrato/servic
 import Reserva from "../../domain/contrato/entidades/Reserva";
 import BN from "bn.js"
 import Publicacion from "../../domain/contrato/entidades/Publicacion";
+import { BigNumber } from "bignumber.js"
 
 interface Room {
     roomId: BN
@@ -23,7 +24,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
         const contract = new web3.eth.Contract(<any>ContractABI, process.env.CONTRACT_ADDRESS)
 
         const tx = await contract.methods.createRoom(
-            web3.utils.toWei(publicacion.precioPorNoche.toString())
+            web3.utils.toWei(new BigNumber(publicacion.precioPorNoche).toFixed())
         )
 
         const receipt = await ContratoBookBnB.ejecutar(tx, billetera);
@@ -54,9 +55,10 @@ export class ContratoBookBnB implements IContratoBookBnB {
 
         const room: Room = await contract.methods.rooms(reserva.contratoId).call()
 
-        const precioTotal = new BN(room.price).mul(new BN(reserva.dias()))
+        const precioTotal = new BigNumber(room.price.toString(10))
+                                    .multipliedBy(new BigNumber(reserva.dias()))
 
-        return await ContratoBookBnB.ejecutar(tx, billetera, precioTotal);
+        return await ContratoBookBnB.ejecutar(tx, billetera, new BN(precioTotal.toFixed()))
     }
 
     async aprobarReserva(reserva: Reserva, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<TransactionReceipt> {

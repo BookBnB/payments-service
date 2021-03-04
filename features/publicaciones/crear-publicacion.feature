@@ -23,3 +23,8 @@ Característica:
     Dado que soy un usuario con email 'anfitrion@book.bnb' con una billetera con 0.0001 ethers
     Cuando creo una publicación con precio por noche 1 eth
     Entonces se emite un evento de creación de la publicación fallida
+
+  Escenario: Creación Exitosa - Precio en notación científica
+    Dado que soy un usuario con email 'anfitrion@book.bnb' con una billetera con 100 ethers
+    Cuando creo una publicación con precio por noche '4.8e-8' eth
+    Entonces se emite un evento de confirmación de la nueva publicación
