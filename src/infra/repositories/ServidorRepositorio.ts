@@ -27,4 +27,8 @@ export class ServidorRepositorio implements IServidorRepositorio {
 
         return servidor
     }
+
+    async obtenerPorNombre(nombre: string): Promise<Servidor> {
+        return await this.repo.findOneOrFail({ where: { nombre } })
+    }
 }

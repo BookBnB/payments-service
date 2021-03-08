@@ -1,4 +1,4 @@
-import { IsString, IsUUID } from "class-validator";
+import { IsBoolean, IsString, IsUUID } from "class-validator";
 import Servidor from "../entidades/Servidor";
 
 export default class ServidorDTO {
@@ -11,9 +11,13 @@ export default class ServidorDTO {
     @IsString()
     public token!: string;
 
+    @IsBoolean()
+    public bloqueado!: boolean
+
     constructor(servidor: Servidor) {
         this.id = servidor.id as string;
         this.nombre = servidor.nombre;
         this.token = servidor.token;
+        this.bloqueado = servidor.bloqueado;
     }
 }

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { ExpressMiddlewareInterface, UnauthorizedError } from 'routing-controllers';
+import { ExpressMiddlewareInterface, ForbiddenError, UnauthorizedError } from 'routing-controllers';
 import Servidor from '../../domain/servidores/entidades/Servidor';
 import ServidorInexistenteError from '../../domain/servidores/excepciones/ServidorInexistenteError';
 import IServidorRepositorio from '../../domain/servidores/repositorios/ServidorRepositorio';
@@ -22,6 +22,10 @@ export default class APITokenMiddleware implements ExpressMiddlewareInterface {
 
         try {
             const servidor: Servidor = await this.servidores.obtenerPorToken(token)
+
+            if (servidor.bloqueado) {
+                throw new ForbiddenError('Blocked API key')
+            }
         } catch (e) {
             if (e instanceof ServidorInexistenteError) {
                 throw new UnauthorizedError('Invalid API key')

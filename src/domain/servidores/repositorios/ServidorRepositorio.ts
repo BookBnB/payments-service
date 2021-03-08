@@ -6,4 +6,6 @@ export default interface IServidorRepositorio {
     listar(): Promise<Servidor[]>;
 
     obtenerPorToken(token: string): Promise<Servidor>;
+
+    obtenerPorNombre(nombre: string): Promise<Servidor>;
 }

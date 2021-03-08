@@ -16,4 +16,16 @@ export default class Servidores extends Recurso {
     static async listar(context: any) {
         await this.get(context, '/')
     }
+
+    static async bloquear(context: any, nombre: string) {
+        await this.put(context, `/${nombre}/bloqueo`, {
+            bloqueado: true
+        })
+    }
+
+    static async desbloquear(context: any, nombre: string) {
+        await this.put(context, `/${nombre}/bloqueo`, {
+            bloqueado: false
+        })
+    }
 }
