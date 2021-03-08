@@ -1,12 +1,14 @@
-import {Body, Get, HttpCode, JsonController, Post} from "routing-controllers";
+import {Body, Get, HttpCode, JsonController, Post, UseBefore} from "routing-controllers";
 import {OpenAPI, ResponseSchema} from "routing-controllers-openapi";
 import {CrearServidor, CrearServidorDTO} from "../domain/servidores/casos-uso/CrearServidor";
 import ServidorDTO from "../domain/servidores/dtos/ServidorDTO";
 import {ListarServidores} from "../domain/servidores/casos-uso/ListarServidores";
+import APITokenMiddleware from "./middlewares/APITokenMiddleware";
 
 
 @OpenAPI({security: [{basicAuth: []}]})
 @JsonController('/servidores')
+@UseBefore(APITokenMiddleware)
 export class ServidorController {
     constructor(
         private readonly crearServidor: CrearServidor,

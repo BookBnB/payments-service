@@ -1,9 +1,10 @@
-import {Body, HttpCode, JsonController, Post} from "routing-controllers";
+import {Body, HttpCode, JsonController, Post, UseBefore} from "routing-controllers";
 import {OpenAPI, ResponseSchema} from "routing-controllers-openapi";
 import {CrearPublicacion} from "../domain/contrato/casos-uso/CrearPublicacion";
 import Result from "./common/Result";
 import Publicacion from "../domain/contrato/entidades/Publicacion";
 import {IsNumber, IsUUID} from "class-validator";
+import APITokenMiddleware from "./middlewares/APITokenMiddleware";
 
 export class CrearPublicacionDTO {
     @IsUUID(4)
@@ -25,6 +26,7 @@ export class CrearPublicacionDTO {
 
 @OpenAPI({security: [{basicAuth: []}]})
 @JsonController('/publicaciones')
+@UseBefore(APITokenMiddleware)
 export class PublicacionController {
     constructor(
         private readonly crearPublicacion: CrearPublicacion

@@ -1,4 +1,4 @@
-import {Body, Get, HttpCode, HttpError, JsonController, NotFoundError, Params, Post} from "routing-controllers";
+import {Body, Get, HttpCode, HttpError, JsonController, NotFoundError, Params, Post, UseBefore} from "routing-controllers";
 import {OpenAPI, ResponseSchema} from "routing-controllers-openapi";
 import {CrearBilletera} from "../domain/billeteras/casos-uso/CrearBilletera";
 import { VerBilletera } from "../domain/billeteras/casos-uso/VerBilletera";
@@ -6,9 +6,11 @@ import BilleteraDTO from "../domain/billeteras/dtos/BilleteraDTO";
 import BilleteraInexistenteError from "../domain/billeteras/excepciones/BilleteraInexistenteError";
 import BilleteraYaExisteError from "../domain/billeteras/excepciones/BilleteraYaExisteError";
 import UUID from "../domain/common/entidades/UUID";
+import APITokenMiddleware from "./middlewares/APITokenMiddleware";
 
 @OpenAPI({security: [{basicAuth: []}]})
 @JsonController('/billeteras')
+@UseBefore(APITokenMiddleware)
 export class BilleteraController {
     constructor(
         private readonly crearBilletera: CrearBilletera,

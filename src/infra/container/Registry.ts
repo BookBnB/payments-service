@@ -39,6 +39,7 @@ import {ServidorRepositorio} from "../repositories/ServidorRepositorio";
 import IGeneradorToken from "../../domain/servidores/servicios/GeneradorToken";
 import {GeneradorToken} from "../servicios/GeneradorToken";
 import {ListarServidores} from "../../domain/servidores/casos-uso/ListarServidores";
+import APITokenMiddleware from "../../application/middlewares/APITokenMiddleware";
 
 export default class Registry {
     public async registrar(container: DIContainer): Promise<IContainer> {
@@ -129,6 +130,11 @@ export default class Registry {
             new ServidorRepositorio(container.get<Repository<Servidor>>()));
 
         container.registerSingleton<IGeneradorToken>(() => new GeneradorToken())
+        container.registerSingleton<APITokenMiddleware>(() =>
+            new APITokenMiddleware(
+                container.get<IServidorRepositorio>()
+            )
+        )
     }
 
     protected async registrarMetricas(container: DIContainer) {

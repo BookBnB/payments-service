@@ -1,4 +1,4 @@
-import {Body, Delete, Get, JsonController, Params, Post, Put} from "routing-controllers";
+import {Body, Delete, Get, JsonController, Params, Post, Put, UseBefore} from "routing-controllers";
 import {OpenAPI, ResponseSchema} from "routing-controllers-openapi";
 import {AprobarReserva} from "../domain/contrato/casos-uso/AprobarReserva";
 import {CrearReserva} from "../domain/contrato/casos-uso/CrearReserva";
@@ -10,6 +10,7 @@ import {Type} from "class-transformer";
 import { CancelarReserva } from "../domain/contrato/casos-uso/CancelarReserva";
 import TransaccionReserva from "../domain/reservas/entidades/TransaccionReserva";
 import { ListarTransaccionesReserva } from "../domain/reservas/casos-uso/ListarTransaccionesReserva";
+import APITokenMiddleware from "./middlewares/APITokenMiddleware";
 
 class ReservaDTO {
     @IsString()
@@ -44,6 +45,7 @@ class OperarConReservaDTO extends ReservaDTO {
 
 @OpenAPI({security: [{basicAuth: []}]})
 @JsonController('/reservas')
+@UseBefore(APITokenMiddleware)
 export class ReservaController {
     constructor(
         private readonly crearReserva: CrearReserva,
