@@ -1,6 +1,6 @@
 # Payments Service
 
-[![Build Status](https://travis-ci.com/BookBnB/payments-service.svg?token=ztzmYxxiK9M4zZcGZZzZ&branch=master)](https://travis-ci.com/BookBnB/payments-service)
+[![build](https://github.com/BookBnB/payments-service/workflows/build/badge.svg)](https://github.com/BookBnB/payments-service/actions?query=workflow%3Abuild)
 [![codecov](https://codecov.io/gh/BookBnB/payments-service/branch/master/graph/badge.svg?token=G4MAR98U37)](https://codecov.io/gh/BookBnB/payments-service)
 [![Heroku](https://img.shields.io/badge/heroku-master-success.svg?l?style=flat&logo=heroku&logoColor=white&labelColor=494998)](https://payments-service-master.herokuapp.com/)
 [![Heroku](https://img.shields.io/badge/heroku-develop-success.svg?l?style=flat&logo=heroku&logoColor=white&labelColor=494998)](https://payments-service-develop.herokuapp.com/)
@@ -48,7 +48,7 @@ npm run migration:revert
 
 ## Api docs
 
-Se expone la especificación OpenApi en [localhost:3000/v1/api.json](http://localhost:3000/v1/api.json) y la ui swagger en [localhost:3000/v1/api-docs](http://localhost:3000/v1/api-docs/).
+Se expone la especificación OpenApi en [localhost:4000/v1/api.json](http://localhost:4000/v1/api.json) y la ui swagger en [localhost:4000/v1/api-docs](http://localhost:4000/v1/api-docs/).
 
 ## Docker
 

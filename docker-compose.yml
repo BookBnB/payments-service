@@ -1,26 +1,46 @@
-version: '3'
+version: '3.7'
 services:
-  app:
+  payments-app:
     image: node:12.19.0-alpine3.12
     ports:
-      - "3000:${PORT}"
+      - "4000:${PORT}"
     working_dir: /app
-    command: npm run devStart
+    command: sh -c "npm install && npm run devStart"
     volumes:
       - ./:/app
     depends_on:
       - postgres
+    networks:
+      - payments-net
+      - bookbnb-net
 
   postgres:
-    image: postgres:13.0-alpine
+    build: docker/postgres
     hostname: "${DB_HOSTNAME}"
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
+      - TEST_DB_NAME=${TEST_DB_NAME}
     volumes:
-      - payments-service-postgres13-data:/var/lib/postgresql/data
+      - bookbnb-payments-postgres13-data:/var/lib/postgresql/data
     command: -p "${DB_PORT}"
+    networks:
+      - payments-net
+
+  ganache:
+    image: trufflesuite/ganache-cli:latest
+    ports:
+      - "8545:8545"
+    command: -e 1000000 -s asecretseed
+    networks:
+      - payments-net
 
 volumes:
-  payments-service-postgres13-data:
+  bookbnb-payments-postgres13-data:
+  bookbnb-payments-pgAdmin-data:
+
+networks:
+  payments-net:
+  bookbnb-net:
+    name: bookbnb-net

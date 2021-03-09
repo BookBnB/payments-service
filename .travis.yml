@@ -6,6 +6,28 @@ node_js:
 
 services:
   - docker
+  - postgresql
+
+addons:
+  postgresql: "13"
+  apt:
+    packages:
+      - postgresql-13
+      - postgresql-client-13
+
+before_install:
+  - sudo sed -i -e '/local.*peer/s/postgres/all/' -e 's/peer\|md5/trust/g' /etc/postgresql/*/main/pg_hba.conf
+  - sudo systemctl restart postgresql@13-main
+  - sleep 1
+
+before_script:
+  - . features/.env
+  - export DB_PASSWORD='' DB_HOSTNAME='localhost' DB_PORT=$PGPORT
+  - psql -c "CREATE DATABASE $DB_NAME;" -U postgres
+  - docker pull trufflesuite/ganache-cli:latest
+  - export NODE_URL='http://localhost:8545'
+  - docker run --detach --publish 8545:8545 trufflesuite/ganache-cli:latest -e 10000 -a 1 -s asecretseed
+  - sleep 3
 
 script:
   - npm run test:coverage
@@ -18,3 +40,7 @@ deploy:
   on:
     all_branches: true
     condition: $TRAVIS_BRANCH = master || $TRAVIS_BRANCH = develop
+
+env:
+  global:
+    - PGPORT=5433

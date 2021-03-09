@@ -1,33 +1,24 @@
-import Api from "./Api";
-import { configure } from "log4js";
-import Log4JSLogger from "./infra/logging/Logger";
 import dotenv from 'dotenv';
 import dotenvExpand from 'dotenv-expand';
-import registerTypes from "./infra/container/registerTypes";
+import { configure } from "log4js";
+import app from './app/index';
+import { ILogger } from "./infra/logging/Logger";
+import logConfig from '../config/log-config.json';
+import Registry from "./infra/container/Registry";
 import {DIContainer} from "@wessberg/di";
-
 
 async function main() {
 	dotenvExpand(dotenv.config())
-	configure(require('../config/log-config.json'));
+	configure(logConfig);
 
-	const DEFAULT_PORT: number = 3000;
-
+	const DEFAULT_PORT: number = 4000;
 	const port: number = process.env.PORT ? parseInt(process.env.PORT) : DEFAULT_PORT;
 
-	const api: Api = new Api({
-		port,
-		logger: new Log4JSLogger('Api'),
-		container: await registerTypes(new DIContainer()),
-		openApiInfo: {
-			info: {
-				title: 'Node temple',
-				version: '1.0.0'
-			}
-		}
-	});
+	const container = new DIContainer()
+	await new Registry().registrar(container)
 
-	await api.start();
+	const appLogger: ILogger = container.get<ILogger>();
+    (await app(container)).listen(port, () => appLogger.info(`Listening at port ${port}`))
 }
 
 main();

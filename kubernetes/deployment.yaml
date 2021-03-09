@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookbnb-payments
+  labels:
+    app: bookbnb-payments
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookbnb-payments
+  template:
+    metadata:
+      labels:
+        app: bookbnb-payments
+    spec:
+      containers:
+      - name: payments
+        image: ghcr.io/bookbnb/payments-service:latest
+        ports:
+        - name: payments-port
+          containerPort: 80
+          protocol: TCP
+        resources:
+          limits:
+            memory: "300Mi"
+            cpu: "200m"
+          requests:
+            memory: "150Mi"
+            cpu: "100m"
+        envFrom:
+          - secretRef:
+              name: payments-secret
+          - configMapRef:
+              name: payments-config
