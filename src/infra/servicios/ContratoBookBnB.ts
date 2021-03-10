@@ -27,7 +27,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
             web3.utils.toWei(new BigNumber(publicacion.precioPorNoche).toFixed())
         )
 
-        const receipt = await ContratoBookBnB.ejecutar(tx, billetera);
+        const receipt = await ContratoBookBnB.ejecutar(tx, billetera, web3);
 
         const evento = receipt.events!.RoomCreated;
 
@@ -58,7 +58,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
         const precioTotal = new BigNumber(room.price.toString(10))
                                     .multipliedBy(new BigNumber(reserva.dias()))
 
-        return await ContratoBookBnB.ejecutar(tx, billetera, new BN(precioTotal.toFixed()))
+        return await ContratoBookBnB.ejecutar(tx, billetera, web3, new BN(precioTotal.toFixed()))
     }
 
     async aprobarReserva(reserva: Reserva, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<TransactionReceipt> {
@@ -79,7 +79,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
             reserva.getNocheFin().getFullYear()
         )
 
-        return await ContratoBookBnB.ejecutar(tx, billeteraAnfitrion)
+        return await ContratoBookBnB.ejecutar(tx, billeteraAnfitrion, web3)
     }
 
     async rechazarReserva(reserva: Reserva, billeteraAnfitrion: Billetera, billeteraHuesped: Billetera): Promise<TransactionReceipt> {
@@ -100,7 +100,7 @@ export class ContratoBookBnB implements IContratoBookBnB {
             reserva.getNocheFin().getFullYear()
         )
 
-        return await ContratoBookBnB.ejecutar(tx, billeteraAnfitrion)
+        return await ContratoBookBnB.ejecutar(tx, billeteraAnfitrion, web3)
     }
 
     async cancelarReserva(reserva: Reserva, billeteraHuesped: Billetera): Promise<TransactionReceipt> {
@@ -120,14 +120,17 @@ export class ContratoBookBnB implements IContratoBookBnB {
             reserva.getNocheFin().getFullYear()
         )
 
-        return await ContratoBookBnB.ejecutar(tx, billeteraHuesped)
+        return await ContratoBookBnB.ejecutar(tx, billeteraHuesped, web3)
     }
 
-    private static async ejecutar(tx: any, billetera: Billetera, value: BN = new BN(0)): Promise<TransactionReceipt> {
+    private static async ejecutar(tx: any, billetera: Billetera, web3: Web3, value: BN = new BN(0)): Promise<TransactionReceipt> {
         try {
+            const chainId = await web3.eth.getChainId()
+
             return await tx.send({
                 from: billetera.direccion,
-                value: value
+                value: value,
+                chainId,
             })
         } catch (err) {
             throw TransaccionRevertidaError.desdeError(err);
